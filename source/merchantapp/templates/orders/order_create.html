@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post" action="{% url 'merchantapp:order_create' %}?customer={{ request.GET.customer }}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+    </form>
+{% endblock %}
