@@ -65,8 +65,6 @@ class ProgramCreateView(CreateView):
     template_name = 'program_create.html'
     form_class = ProgramForm
 
-    # def form_valid(self, form):
-    #     program = form.save(commit=False)
     def get_success_url(self):
         return reverse_lazy('merchantapp:programs')
 
@@ -80,6 +78,15 @@ class BranchCreateView(CreateView):
     model = Branch
     template_name = 'branches/branch_create.html'
     form_class = BranchForm
+
+    def form_valid(self, form):
+        branch = form.save(commit=False)
+        branch.address = form.cleaned_data['address']
+        response = super().form_valid(form)
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy('merchantapp:branches')
 
 
 class OrderProcessingView(ListView):
