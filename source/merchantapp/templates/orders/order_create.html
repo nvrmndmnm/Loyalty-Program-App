@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form class="w-50" method="post" action="{% url 'merchantapp:order_create' %}?customer={{ request.GET.customer }}">
+        {% include 'partial/form.html' with button_text='Отправить' %}
+    </form>
+{% endblock %}

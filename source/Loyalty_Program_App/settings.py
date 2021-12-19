@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import conf
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'webapp',
+    'merchantapp',
+    'clientapi'
 ]
 
 MIDDLEWARE = [
@@ -78,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django',
-        'USER': 'kaisar',
-        'PASSWORD': 'Kaisar_99',
+        'USER': conf.mysql_credentials['username'],
+        'PASSWORD': conf.mysql_credentials['password'],
         'HOST': 'localhost',
         'PORT': ''
     }
