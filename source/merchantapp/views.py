@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
@@ -123,3 +123,15 @@ def redeem_user_reward(request, **kwargs):
         reward.redeemed = True
         reward.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def download_customers_file(request, **kwargs):
+    file_name = 'customers.csv'
+    lines = ['Имя пользователя, Всего заказов, Всего наград']
+    data = get_user_model().objects.all()
+    for d in data:
+        lines.append(f'{d.username}, {d.order_user.count()}, {d.user_reward.count()}')
+    response_content = '\n'.join(lines)
+    response = HttpResponse(response_content, content_type="text/plain,charset=utf8")
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(file_name)
+    return response

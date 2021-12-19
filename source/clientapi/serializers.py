@@ -9,8 +9,6 @@ class BranchWriteSerializer(serializers.ModelSerializer):
 
 
 class BranchReadSerializer(serializers.ModelSerializer):
-    # author = UserSerializer(read_only=True)
-
     class Meta:
         model = Branch
         fields = "__all__"

@@ -7,6 +7,7 @@ urlpatterns = [
     path('', merchant_views.MerchantIndexView.as_view(), name='merchant_index'),
     path('s/', merchant_views.CustomerSearchView.as_view(), name='user_search'),
     path('customers/', merchant_views.CustomerListView.as_view(), name='customers'),
+    path('customers/download/', merchant_views.download_customers_file, name='customers_download'),
     path('programs/', merchant_views.ProgramListView.as_view(), name='programs'),
     path('programs/create/', merchant_views.ProgramCreateView.as_view(), name='program_create'),
     path('branches/', merchant_views.BranchListView.as_view(), name='branches'),
