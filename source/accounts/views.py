@@ -1,23 +1,22 @@
-from django.contrib.auth import login
-from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, UpdateView
-from django.contrib.auth.models import User
+from django.views.generic import DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model, update_session_auth_hash
 
-from accounts.forms import RegistrationForm, PasswordChangeForm, UserChangeForm
+from accounts.forms import PasswordChangeForm, UserChangeForm
+
+from django.shortcuts import render, redirect
+from accounts.forms import UserAdminCreationForm
 
 
-class RegisterView(CreateView):
-    model = User
-    template_name = "registration/register.html"
-    form_class = RegistrationForm
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("webapp:index")
+def register(req):
+    form = UserAdminCreationForm()
+    if req.method == 'POST':
+        form = UserAdminCreationForm(req.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:login')
+    return render(req, 'registration/register.html', {'form': form})
 
 
 class UserDetailsView(LoginRequiredMixin, DetailView):

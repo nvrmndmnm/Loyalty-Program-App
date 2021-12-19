@@ -1,23 +1,23 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.forms import widgets
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 
-class RegistrationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        fields = ["username", "first_name", "password1", "password2"]
+class UserAdminCreationForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['phone', 'name', 'birth_date', 'email']
         widgets = {
-            "username": widgets.TextInput(attrs={"placeholder": "Phone number"}),
-            "first_name": widgets.TextInput(attrs={"placeholder": "First name"})
+            "birth_date": forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
         }
 
 
 class UserChangeForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
-        fields = ["first_name"]
-        label = {"first_name": "Name"}
+        fields = ["name", "email"]
+        label = {"name": "Name", "email": "Email"}
 
 
 class PasswordChangeForm(forms.ModelForm):
