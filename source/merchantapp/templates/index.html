@@ -20,7 +20,7 @@
                     <p class="card-text">Завершено заказов: {{ user.order_user.count }}</p>
                     <a class="btn btn-sm btn-secondary me-2 {% if user.user_reward.all|redeemable_count == 0 %}disabled{% endif %}"
                        href="{% url 'merchantapp:redeem_user_reward' user.pk %}">Выдать награду</a>
-                    <a class="btn btn-sm btn-secondary me-2" href="{% url 'merchantapp:order_create' %}?customer={{ user.pk }}">Завершить заказ</a>
+                    <a class="btn btn-sm btn-secondary me-2" href="{% url 'merchantapp:order_create' %}?customer={{ user.pk }}">Оформить заказ</a>
                     <a class="btn btn-sm btn-secondary" href="{% url 'merchantapp:orders' user.pk %}">История заказов</a>
                 </div>
             </div>

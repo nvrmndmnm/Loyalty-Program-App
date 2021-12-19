@@ -1,0 +1,24 @@
+{% csrf_token %}
+{% for error in form.non_field_errors %}
+    <p class="form-error">{{ error }}</p>
+{% endfor %}
+{% for field in form %}
+    <div class="d-flex justify-content-between flex-wrap">
+        <label class="me-2" for="{{ field.id_for_label }}">{{ field.label }}:</label>
+        {% if field.errors %}
+            <p class="field-error">{{ field }}</p>
+            {% for error in field.errors %}
+                <p class="form-error">{{ error }}</p>
+            {% endfor %}
+        {% else %}
+            <p>{{ field }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+{% if not fields_only %}
+    <hr>
+    <div class="form-buttons d-flex justify-content-end">
+        <button class="btn btn-secondary me-3" type="submit">{{ button_text }}</button>
+        <a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">Назад</a>
+    </div>
+{% endif %}

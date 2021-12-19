@@ -16,7 +16,9 @@
             <tr>
                 <th scope="row">{{ branch.id }}</th>
                 <td>{{ branch.name }}</td>
-                <td>{{ branch.address }}</td>
+                <td>{{ branch.address.street }}
+                    {{ branch.address.building }}
+                    {{ branch.address.apartment|default_if_none:'' }}</td>
                 <td>@mdo</td>
             </tr>
         {% endfor %}

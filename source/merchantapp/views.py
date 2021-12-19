@@ -6,8 +6,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import ListView, TemplateView, CreateView
-from merchantapp.forms import UserSearchForm
-from merchantapp.models import Program, Branch, Order, UserReward
+from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm
+from merchantapp.models import Program, ProgramConditionType, ProgramRewardType, ProgramCondition, ProgramReward, \
+    Branch, Order, UserReward
 
 
 class CustomerSearchView(ListView):
@@ -45,6 +46,11 @@ class CustomerSearchView(ListView):
             return self.search_form.cleaned_data['id']
 
 
+class CustomerListView(ListView):
+    model = get_user_model()
+    template_name = 'customers/customers_list.html'
+
+
 class MerchantIndexView(TemplateView):
     template_name = 'index.html'
 
@@ -57,7 +63,12 @@ class ProgramListView(ListView):
 class ProgramCreateView(CreateView):
     model = Program
     template_name = 'program_create.html'
-    fields = ['title', 'condition', 'reward']
+    form_class = ProgramForm
+
+    # def form_valid(self, form):
+    #     program = form.save(commit=False)
+    def get_success_url(self):
+        return reverse_lazy('merchantapp:programs')
 
 
 class BranchListView(ListView):
@@ -68,7 +79,7 @@ class BranchListView(ListView):
 class BranchCreateView(CreateView):
     model = Branch
     template_name = 'branches/branch_create.html'
-    fields = ['name', 'address']
+    form_class = BranchForm
 
 
 class OrderProcessingView(ListView):

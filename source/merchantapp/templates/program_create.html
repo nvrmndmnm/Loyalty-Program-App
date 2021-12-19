@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    {{ form.as_p }}
+    <form class="w-50" action="{% url 'merchantapp:program_create' %}" method="post" novalidate>
+        {% include 'partial/form.html' with button_text='Отправить' %}
+    </form>
 {% endblock %}
