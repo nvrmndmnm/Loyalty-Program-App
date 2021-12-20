@@ -20,17 +20,17 @@ def help(update: Update, context: CallbackContext):
 # def echo(update: Update, context: CallbackContext):
 #     context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text,)
 
+
 # Оброботка клавиатуры
 def establishments(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text='Здесь будут отображаться все заведения',)
 
+
 def main():
     bot = Bot(
-        token = TG_TOKEN,
+        token=TG_TOKEN,
     )
-    updater = Updater(
-        bot=bot,
-    )
+    updater = Updater(TG_TOKEN, use_context=True)
 
     about_handler = CommandHandler('about', about)
     help_handler = CommandHandler('help', help)
@@ -45,6 +45,7 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
 if __name__ =='__main__':
     main()
