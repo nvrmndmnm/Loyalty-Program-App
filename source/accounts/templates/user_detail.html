@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}User {{ user_object.username }}{% endblock %}
+
+{% block content %}
+
+    <div class="text-center">
+        <h1>Profile</h1>
+        {% ifequal user user_object %}
+            <p><a class="text-decoration-none" href="{% url "accounts:edit_profile" user_object.pk %}">Edit Profile</a></p>
+            <p><a class="text-decoration-none" href="{% url "accounts:change_password" user_object.pk %}">ChangePassword</a></p>
+        {% endifequal %}
+        <p><b>User's phone number: </b>{{ user_object.phone }}</p>
+        {% if user_object.first_name %}
+            <p><b>FirstName: </b>{{ user_object.first_name }}</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
