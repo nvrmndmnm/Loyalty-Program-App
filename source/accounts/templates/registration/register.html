@@ -1,0 +1,18 @@
+{% extends "auth_base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+    <h1>Sign up</h1>
+    <form action="{% url "accounts:register" %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary my-5" style="width: 100%">Register</button>
+    </form>
+    <p><a href="{% url "accounts:login" %}">Already have one ?</a></p>
+</div>
+
+{% endblock %}

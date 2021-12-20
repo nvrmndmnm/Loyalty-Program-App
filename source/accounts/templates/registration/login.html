@@ -1,0 +1,24 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <div class="form-card">
+            <div class="my-5 p-5" style="border: black 1px solid">
+                <form action="{% url "accounts:login" %}" method="post">
+                    {% csrf_token %}
+                    <h1 class="text-center">Login</h1>
+                    <br>
+                    <input type="text" name="username" placeholder="Username" style="width: 88%" class="mx-4 my-2">
+                    <br>
+                    <input type="password" name="password" placeholder="Password" style="width: 88%" class="mx-4 my-2">
+                    <br>
+                    <input type="submit" value="Login" class="btn btn-primary mx-4 my-2" style="width: 88%">
+                </form>
+            </div>
+            <div class="" style="border: black 1px solid">
+                <h5 class="p-2 text-center">Don't have an account?<a class="navbar-brand brand_name" href="{% url "accounts:register" %}">Register</a></h5>
+            </div>
+        </div>
+    </div>
+{% endblock %}
