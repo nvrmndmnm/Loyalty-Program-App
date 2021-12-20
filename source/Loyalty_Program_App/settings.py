@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'webapp',
     'merchantapp',
-    'clientapi'
+    'clientapi',
     'accounts'
 ]
 
