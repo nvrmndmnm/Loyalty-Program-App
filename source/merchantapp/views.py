@@ -37,7 +37,7 @@ class CustomerSearchView(ListView):
             return queryset
 
     def get_query(self):
-        query = Q(username__icontains=self.search_value)
+        query = Q(phone__icontains=self.search_value)
         return query
 
     def get_search_form(self):

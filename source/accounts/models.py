@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
     phone_regex = RegexValidator(regex=r'^\+7?\d{10}',
                                  message="Phone number must be entered in the format: '+77071234567'")
     phone = models.CharField(validators=[phone_regex], max_length=12, unique=True, verbose_name='Phone Number', blank=False, help_text='Enter 10 digits phone number with +7')
-    birth_date = models.DateField(null=False, blank=False, verbose_name="Date of birth")
+    birth_date = models.DateField(null=True, blank=True, verbose_name="Date of birth")
     name = models.CharField(null=True, blank=True, max_length=100, verbose_name="Name")
     email = models.EmailField(null=True, blank=True, verbose_name="Email")
 
