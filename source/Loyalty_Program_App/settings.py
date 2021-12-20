@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'Loyalty_Program_App.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django',
+        'USER': 'kaisar',
+        'PASSWORD': 'Kaisar_99',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
