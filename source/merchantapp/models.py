@@ -114,7 +114,7 @@ class Order(BaseModel):
                                 related_name='order_program', verbose_name='Программа')
 
     def __str__(self):
-        return f'{self.pk}'
+        return f'{self.pk} - {self.user}'
 
 
 class UserReward(BaseModel):

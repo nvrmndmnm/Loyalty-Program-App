@@ -1,4 +1,6 @@
-from datetime import datetime
+import datetime
+
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
@@ -106,14 +108,26 @@ class OrderCreateView(CreateView):
         if customer:
             order.user_id = customer
             order.status = 'FINISHED'
-            order.completion_date = datetime.now()
+            order.completion_date = timezone.now()
             order.save()
+            add_user_reward(customer, order.program)
+            return redirect(self.get_success_url())
         else:
-            self.form_invalid(form)
-        return redirect(self.get_success_url())
+            return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy('merchantapp:merchant_index')
+
+
+def add_user_reward(customer, program):
+    last_obtained_reward = UserReward.objects.filter(user_id=customer).order_by('-time_created').first()
+    last_orders_count = Order.objects.filter(user_id=customer,
+                                             status='FINISHED',
+                                             program=program,
+                                             completion_date__gt=last_obtained_reward.time_created
+                                             if last_obtained_reward else datetime.datetime(1970, 1, 1)).count()
+    if last_orders_count == program.condition.amount:
+        UserReward.objects.create(user_id=customer, program=program)
 
 
 def redeem_user_reward(request, **kwargs):
