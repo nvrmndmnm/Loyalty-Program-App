@@ -1,7 +1,9 @@
-from datetime import datetime
+import datetime
+
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
@@ -106,14 +108,26 @@ class OrderCreateView(CreateView):
         if customer:
             order.user_id = customer
             order.status = 'FINISHED'
-            order.completion_date = datetime.now()
+            order.completion_date = timezone.now()
             order.save()
+            add_user_reward(customer, order.program)
+            return redirect(self.get_success_url())
         else:
-            self.form_invalid(form)
-        return redirect(self.get_success_url())
+            return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy('merchantapp:merchant_index')
+
+
+def add_user_reward(customer, program):
+    last_obtained_reward = UserReward.objects.filter(user_id=customer).order_by('-time_created').first()
+    last_orders_count = Order.objects.filter(user_id=customer,
+                                             status='FINISHED',
+                                             program=program,
+                                             completion_date__gt=last_obtained_reward.time_created
+                                             if last_obtained_reward else datetime.datetime(1970, 1, 1)).count()
+    if last_orders_count == program.condition.amount:
+        UserReward.objects.create(user_id=customer, program=program)
 
 
 def redeem_user_reward(request, **kwargs):
@@ -123,3 +137,15 @@ def redeem_user_reward(request, **kwargs):
         reward.redeemed = True
         reward.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def download_customers_file(request, **kwargs):
+    file_name = 'customers.csv'
+    lines = ['Имя пользователя, Всего заказов, Всего наград']
+    data = get_user_model().objects.all()
+    for d in data:
+        lines.append(f'{d.username}, {d.order_user.count()}, {d.user_reward.count()}')
+    response_content = '\n'.join(lines)
+    response = HttpResponse(response_content, content_type="text/plain,charset=utf8")
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(file_name)
+    return response

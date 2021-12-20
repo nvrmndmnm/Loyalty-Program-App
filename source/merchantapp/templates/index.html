@@ -4,7 +4,7 @@
     <form method="get" action={% url 'merchantapp:user_search' %}>
         <div class="input-group">
             <input class="form-control border" type="search" name="id" placeholder="Search">
-            <button type="submit">Search</button>
+            <button class="btn btn-secondary" type="submit">Search</button>
         </div>
     </form>
     {% if user_list %}
