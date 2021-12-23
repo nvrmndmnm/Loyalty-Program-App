@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 
-from clientapi.serializers import BranchWriteSerializer, BranchReadSerializer
+from clientapi.serializers import *
 from merchantapp.models import Branch
 
 
@@ -13,3 +13,4 @@ class BranchViewSet(ModelViewSet):
         if self.action in ("list", "retrieve"):
             return BranchReadSerializer
         return self.serializer_class
+

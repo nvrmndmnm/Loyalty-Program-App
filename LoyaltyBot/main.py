@@ -1,9 +1,14 @@
+from webbrowser import get
+
+# import returns as returns
 from telegram import Bot, InlineKeyboardButton
 from telegram import Update
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
+
+from uplink import Consumer ,returns, get
 
 from buttons import *
 
@@ -15,7 +20,7 @@ def about(update: Update, context: CallbackContext):
 
 
 def help(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Для получения бонусов просто приходите в заведение и сканируйте QR код")
+    context.bot.send_message(chat_id=update.effective_chat.id, text='для получения бонусов просто приходите в заведение и сканируйте QR-код')
 
 # def echo(update: Update, context: CallbackContext):
 #     context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text,)
@@ -23,7 +28,13 @@ def help(update: Update, context: CallbackContext):
 
 # Оброботка клавиатуры
 def establishments(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Здесь будут отображаться все заведения',)
+    branches = ''
+    for i in loyaltyapi.get_repos('branches'):
+        branches += f'Название {i["name"]}\n' \
+                    f'Aдресс: {i["address"]}\n' \
+                    f'{i["description"]}\n\n'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=branches,)
+
 
 
 def main():
@@ -45,6 +56,17 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
+class LoyaltyApi(Consumer):
+    @returns.json
+    @get("{path}/")
+    def get_repos(self, path):
+        pass
+
+loyaltyapi = LoyaltyApi(base_url="http://localhost:8000/api/")
+
+
+loyaltyapi.get_repos('branches')
 
 
 if __name__ =='__main__':
