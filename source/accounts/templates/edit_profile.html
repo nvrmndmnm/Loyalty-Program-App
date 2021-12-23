@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
 
 {% block title %}Update {{ user_object.username }}{% endblock %}
 
@@ -9,7 +8,7 @@
 
     <form action="{% url "accounts:edit_profile" user_object.pk %}" method="post">
         {% csrf_token %}
-        {{ form|crispy }}
+        {{ form }}
         <button class="btn btn-success" style="width: 100%">Edit</button>
     </form>
 

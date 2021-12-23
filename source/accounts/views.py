@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model, update_session_auth_hash
 
@@ -9,14 +9,11 @@ from django.shortcuts import render, redirect
 from accounts.forms import UserAdminCreationForm
 
 
-def register(req):
-    form = UserAdminCreationForm()
-    if req.method == 'POST':
-        form = UserAdminCreationForm(req.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('accounts:login')
-    return render(req, 'registration/register.html', {'form': form})
+class RegisterView(CreateView):
+    model = get_user_model()
+    template_name = 'registration/register.html'
+    form_class = UserAdminCreationForm
+    success_url = 'accounts:login'
 
 
 class UserDetailsView(LoginRequiredMixin, DetailView):
@@ -27,7 +24,8 @@ class UserDetailsView(LoginRequiredMixin, DetailView):
 
 class ChangeProfileAccessMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user == self.get_object() or self.request.user.is_superuser or self.request.user.groups.filter(name="admins")
+        return self.request.user == self.get_object() or self.request.user.is_superuser or\
+               self.request.user.groups.filter(name="admins")
 
 
 class UserUpdateView(ChangeProfileAccessMixin, UpdateView):

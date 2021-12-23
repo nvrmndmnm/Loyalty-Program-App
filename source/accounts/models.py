@@ -31,11 +31,13 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     username = None
-    phone_regex = RegexValidator(regex=r'^\+7?\d{10}',
+    phone_regex = RegexValidator(regex=r'^7?\d{10}',
                                  message="Phone number must be entered in the format: '+77071234567'")
-    phone = models.CharField(validators=[phone_regex], max_length=12, unique=True, verbose_name='Phone Number', blank=False, help_text='Enter 10 digits phone number with +7')
-    birth_date = models.DateField(null=True, blank=True, verbose_name="Date of birth")
-    name = models.CharField(null=True, blank=True, max_length=100, verbose_name="Name")
+    phone = models.CharField(validators=[phone_regex], max_length=12, unique=True, verbose_name='Номер телефона',
+                             blank=False, help_text='Enter 10 digits phone number with +7')
+    tg_id = models.IntegerField(null=True, blank=True, unique=True, verbose_name='Telegram ID')
+    birth_date = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
+    name = models.CharField(null=True, blank=True, max_length=100, verbose_name='Имя')
     email = models.EmailField(null=True, blank=True, verbose_name="Email")
 
     created_at = models.DateTimeField(auto_now_add=True)

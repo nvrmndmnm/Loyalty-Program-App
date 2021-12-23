@@ -1,18 +1,12 @@
-{% extends "auth_base.html" %}
-{% load crispy_forms_filters %}
-
-{% block title %}Register{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
 {% block content %}
 
-<div class="text-center">
-    <h1>Sign up</h1>
-    <form action="{% url "accounts:register" %}" method="post">
+    <h1>Регистрация</h1>
+    <form class="w-50 mt-4" action="{% url "accounts:register" %}" method="post" novalidate>
         {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-primary my-5" style="width: 100%">Register</button>
+        {% include 'partial/form.html' with button_text='Регистрация' %}
     </form>
-    <p><a href="{% url "accounts:login" %}">Already have one ?</a></p>
-</div>
+    <p><a href="{% url "accounts:login" %}">Уже есть аккаунт?</a></p>
 
 {% endblock %}
