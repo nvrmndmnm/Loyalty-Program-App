@@ -18,4 +18,5 @@ class BranchWriteSerializer(serializers.ModelSerializer):
 class BranchReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
-        fields = "__all__"
+        fields = ["name", "address", "description"]
+

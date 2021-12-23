@@ -5,6 +5,8 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
 
+from uplink import Consumer ,returns, get
+
 from buttons import *
 
 from config import TG_TOKEN
@@ -39,7 +41,13 @@ def sendRequest():
 
 # Оброботка клавиатуры
 def establishments(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Здесь будут отображаться все заведения',)
+    branches = ''
+    for i in loyaltyapi.get_repos('branches'):
+        branches += f'Название {i["name"]}\n' \
+                    f'Aдресс: {i["address"]}\n' \
+                    f'{i["description"]}\n\n'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=branches,)
+
 
 
 def register(update: Update, context: CallbackContext):
@@ -86,6 +94,17 @@ def main():
     updater.start_polling()
 
     updater.idle()
+
+class LoyaltyApi(Consumer):
+    @returns.json
+    @get("{path}/")
+    def get_repos(self, path):
+        pass
+
+loyaltyapi = LoyaltyApi(base_url="http://localhost:8000/api/")
+
+
+loyaltyapi.get_repos('branches')
 
 
 if __name__ == '__main__':
