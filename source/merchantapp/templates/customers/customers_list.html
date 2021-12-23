@@ -6,17 +6,17 @@
         <thead>
         <tr>
             <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 10%">Имя пользователя</th>
+            <th scope="col" style="width: 10%">Номер телефона</th>
             <th scope="col" style="width: 10%">Всего заказов</th>
             <th scope="col" style="width: 10%">Текущий прогресс</th>
             <th scope="col" style="width: 20%">Получено наград</th>
         </tr>
         </thead>
         <tbody>
-        {% for customer in user_list.all %}
+        {% for customer in customuser_list.all %}
             <tr>
                 <th scope="row">{{ customer.id }}</th>
-                <td>{{ customer.username }}</td>
+                <td>{{ customer.phone }}</td>
                 <td>{{ customer.order_user.count }}</td>
                 <td>{{ customer.program.title }}</td>
                 <td>{{ customer.user_reward.count }}</td>
