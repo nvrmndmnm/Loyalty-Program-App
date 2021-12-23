@@ -127,3 +127,13 @@ class UserReward(BaseModel):
 
     def __str__(self):
         return f'{self.user} - {self.program.reward}'
+
+
+class Article(BaseModel):
+    title = models.CharField(max_length=150, verbose_name='Заголовок')
+    text = models.TextField(max_length=2000, verbose_name='Текст')
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+                               related_name='article_author', verbose_name='Автор')
+
+    def __str__(self):
+        return f'{self.title} - {self.author}'
