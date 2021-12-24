@@ -5,6 +5,8 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 
 router.register('branches', views.BranchViewSet)
+router.register('articles', views.ArticleViewSet)
+router.register('user_rewards', views.UserRewardViewSet)
 
 app_name = 'clientapi'
 
