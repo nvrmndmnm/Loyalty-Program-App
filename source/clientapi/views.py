@@ -7,10 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from clientapi.serializers import UserSerializer, BranchWriteSerializer, BranchReadSerializer
 from merchantapp.models import Branch, Order, UserReward
 from clientapi.serializers import UserSerializer, BranchWriteSerializer, BranchReadSerializer,\
-    ArticleWriteSerializer,ArticleReadSerializer,UserRewardWriteSerializer,UserRewardReadSerializer
+    ArticleWriteSerializer, ArticleReadSerializer, UserRewardWriteSerializer, UserRewardReadSerializer
 from merchantapp.models import Branch, Article, UserReward
 
 
@@ -38,6 +37,7 @@ class BranchViewSet(ModelViewSet):
         if self.action in ("list", "retrieve"):
             return BranchReadSerializer
         return self.serializer_class
+
 
 class ArticleViewSet(ModelViewSet):
     queryset = Article.objects.all()
