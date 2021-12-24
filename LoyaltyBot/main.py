@@ -14,22 +14,18 @@ import requests
 
 
 def start(update: Update, context: CallbackContext):
-    update.message.reply_text('Добро пожаловать в нашего бота-шмота! Пожалуйста, авторизуйтесь для продолжения.',
+    update.message.reply_text('Добро пожаловать в нашего бота! Пожалуйста, авторизуйтесь для продолжения.',
                               reply_markup=get_register_keyboard())
 
 
 def about(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=do_echo(update, context),
-                             reply_markup=get_register_keyboard()
-                             )
+                             text=do_echo(update, context))
 
 
 def help(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=sendRequest(),
-                             reply_markup=get_register_keyboard()
-                             )
+                             text=sendRequest())
 
 
 def sendRequest():
@@ -55,11 +51,13 @@ def register(update: Update, context: CallbackContext):
         data = {'phone': update.message.contact.phone_number.replace('+', ''),
                 'tg_id': update.message.contact.user_id}
         response = requests.post(url, data=data)
-        print(response.text)
-        resp = response.text
+        if str(response.status_code).startswith('2'):
+            reply_text = 'Вы успешно авторизованы.'
+        else:
+            reply_text = response.text
     else:
-        resp = 'Пожалуйста, укажите данные своего аккаунта.'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=resp, reply_markup=get_base_reply_keyboard())
+        reply_text = 'Пожалуйста, укажите данные своего аккаунта.'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text, reply_markup=get_base_reply_keyboard())
 
 
 def do_echo(update: Update, context: CallbackContext):
@@ -102,7 +100,7 @@ class LoyaltyApi(Consumer):
         pass
 
 
-loyaltyapi = LoyaltyApi(base_url="http://localhost:8000/api/")
+loyaltyapi = LoyaltyApi(base_url="http://localhost:8002/api/")
 
 
 loyaltyapi.get_repos('branches')
@@ -110,15 +108,3 @@ loyaltyapi.get_repos('branches')
 
 if __name__ == '__main__':
     main()
-
-
-def build_menu(buttons, n_cols,
-               header_buttons=None,
-               footer_buttons=None):
-    print(buttons)
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
-    if header_buttons:
-        menu.insert(0, [header_buttons])
-    if footer_buttons:
-        menu.append([footer_buttons])
-    return menu
