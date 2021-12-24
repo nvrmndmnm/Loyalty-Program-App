@@ -11,5 +11,6 @@ app_name = 'clientapi'
 urlpatterns = [
     path("", include(router.urls)),
     path('users/create/', views.UserCreateAPIView.as_view(),
-         name='user-detail')
+         name='user-detail'),
+    path('users/<int:phone>/progress/', views.get_user_progress, name='user_progress')
 ]
