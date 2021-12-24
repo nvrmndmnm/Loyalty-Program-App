@@ -48,6 +48,21 @@ def establishments(update: Update, context: CallbackContext):
                     f'{i["description"]}\n\n'
     context.bot.send_message(chat_id=update.effective_chat.id, text=branches,)
 
+#оброботчик кнопки новостей
+def news(update: Update, context: CallbackContext):
+    articles = ''
+    for i in loyaltyapi.get_repos('articles'):
+        articles += f'{i["time_created"][:10]}\n' \
+                    f'{i["title"]}\n' \
+                    f'{i["text"]}\n\n'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=articles,)
+
+def awards(update: Update, context: CallbackContext):
+    user_rewards = ''
+    for i in loyaltyapi.get_repos('user_rewards'):
+        user_rewards += f'{i["program"]}'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=user_rewards,)
+
 
 def register(update: Update, context: CallbackContext):
     if update.message.contact.user_id == update.message.chat_id:
@@ -84,14 +99,20 @@ def main():
     # updater.dispatcher.add_handler(echo_handler)
 
     #handler Для клавиатуры
-    establishments_handler = MessageHandler(Filters.text & (~Filters.command), establishments)
+
+    establishments_handler = MessageHandler(Filters.regex('Заведения'), establishments)
     updater.dispatcher.add_handler(establishments_handler)
+
+    news_handler = MessageHandler(Filters.regex('Новости'), news)
+    updater.dispatcher.add_handler(news_handler)
+
+    awards_handler = MessageHandler(Filters.regex('Мои награды'), awards)
+    updater.dispatcher.add_handler(awards_handler)
 
     register_handler = MessageHandler(Filters.contact & (~Filters.command), register)
     updater.dispatcher.add_handler(register_handler)
 
     updater.start_polling()
-
     updater.idle()
 
 
@@ -100,12 +121,7 @@ class LoyaltyApi(Consumer):
     @get("{path}/")
     def get_repos(self, path):
         pass
-
-
-loyaltyapi = LoyaltyApi(base_url="http://localhost:8000/api/")
-
-
-loyaltyapi.get_repos('branches')
+loyaltyapi = LoyaltyApi(base_url="http://localhost:8002/api/")
 
 
 if __name__ == '__main__':
