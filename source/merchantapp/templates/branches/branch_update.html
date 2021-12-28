@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form class="w-50" method="post" novalidate>
+        {% include 'partial/form.html' with fields_only=True %}
+        {% include 'partial/form.html' with form=address_form button_text='Отправить' %}
+    </form>
+{% endblock %}

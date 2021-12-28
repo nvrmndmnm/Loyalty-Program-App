@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Активные клиенты</h1>
+    <a href="{% url 'merchantapp:customers_download' %}">Выгрузить в CSV</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 5%">#</th>
+            <th scope="col" style="width: 10%">Номер телефона</th>
+            <th scope="col" style="width: 10%">Имя</th>
+            <th scope="col" style="width: 10%">Всего заказов</th>
+            <th scope="col" style="width: 20%">Получено наград</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for customer in customuser_list.all %}
+            <tr>
+                <th scope="row">{{ customer.id }}</th>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                <td>{{ customer.order_user.count }}</td>
+                <td>{{ customer.user_reward.count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

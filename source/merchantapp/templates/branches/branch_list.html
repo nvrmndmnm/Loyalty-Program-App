@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Заведения</h1>
+    <a href="{% url 'merchantapp:branch_create' %}">Добавить точку</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for branch in branch_list.all %}
+            <tr>
+                <th scope="row">{{ branch.id }}</th>
+                <td>{{ branch.name }}</td>
+                <td>{{ branch.address.street }},
+                    {{ branch.address.building }}
+                    {{ branch.address.apartment|default_if_none:'' }}</td>
+                <td><a href="{% url 'merchantapp:branch_update' branch.pk %}">Обновить</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

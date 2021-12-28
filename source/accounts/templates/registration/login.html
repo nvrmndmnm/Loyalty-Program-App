@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+{% block content %}
+        <h1>Вход</h1>
+    <form class="w-50 mt-4" action="{% url "accounts:login" %}" method="post" novalidate>
+        {% csrf_token %}
+        {% include 'partial/form.html' with button_text='Войти' %}
+    </form>
+    <p><a href="{% url "accounts:register" %}">Регистрация</a></p>
+{% endblock %}

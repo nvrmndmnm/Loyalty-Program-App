@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Заказы пользователя</h1>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 5%">#</th>
+            <th scope="col" style="width: 10%">Кол-во</th>
+            <th scope="col" style="width: 10%">Цена</th>
+            <th scope="col" style="width: 10%">Программа</th>
+            <th scope="col" style="width: 20%">Описание</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in order_list.all %}
+            <tr>
+                <th scope="row">{{ order.id }}</th>
+                <td>{{ order.amount }}</td>
+                <td>{{ order.price }}</td>
+                <td>{{ order.program.title }}</td>
+                <td>{{ order.program.reward }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

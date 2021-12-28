@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Программы</h1>
+    <a href="{% url 'merchantapp:program_create' %}">Добавить программу</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 5%">#</th>
+            <th scope="col" style="width: 10%">Название</th>
+            <th scope="col" style="width: 10%">Условие</th>
+            <th scope="col" style="width: 10%">Награда</th>
+            <th scope="col" style="width: 20%">Описание</th>
+            <th scope="col" style="width: 5%">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for program in program_list.all %}
+            <tr>
+                <th scope="row">{{ program.id }}</th>
+                <td>{{ program.title }}</td>
+                <td>{{ program.condition }}</td>
+                <td>{{ program.reward }}</td>
+                <td>{{ program.description }}</td>
+                <td><a href="{% url 'merchantapp:program_update' program.pk %}">Обновить</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
