@@ -19,7 +19,7 @@
                 <td>{{ branch.address.street }},
                     {{ branch.address.building }}
                     {{ branch.address.apartment|default_if_none:'' }}</td>
-                <td>@mdo</td>
+                <td><a href="{% url 'merchantapp:branch_update' branch.pk %}">Обновить</a></td>
             </tr>
         {% endfor %}
         </tbody>

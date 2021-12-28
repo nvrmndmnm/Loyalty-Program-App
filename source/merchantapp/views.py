@@ -1,14 +1,14 @@
+from conf import tg_bot_token
 import datetime
-
 import requests
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import ListView, TemplateView, CreateView, UpdateView
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
 from merchantapp.models import Program,Branch, Order, UserReward
 
@@ -71,6 +71,15 @@ class ProgramCreateView(CreateView):
         return reverse_lazy('merchantapp:programs')
 
 
+class ProgramUpdateView(UpdateView):
+    model = Program
+    template_name = 'program_update.html'
+    form_class = ProgramForm
+
+    def get_success_url(self):
+        return reverse_lazy('merchantapp:programs')
+
+
 class BranchListView(ListView):
     model = Branch
     template_name = 'branches/branch_list.html'
@@ -119,6 +128,49 @@ class BranchCreateView(CreateView):
         return reverse_lazy('merchantapp:branches')
 
 
+class BranchUpdateView(UpdateView):
+    model = Branch
+    template_name = 'branches/branch_update.html'
+    form_class = BranchForm
+
+    def get_address_form(self):
+        form_kwargs = {'instance': self.object.address}
+        if self.request.method == 'POST':
+            form_kwargs['data'] = self.request.POST
+            form_kwargs['files'] = self.request.FILES
+        return AddressForm(**form_kwargs)
+
+    def get_context_data(self, **kwargs):
+        if 'address_form' not in kwargs:
+            kwargs['address_form'] = self.get_address_form()
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, **kwargs):
+        branch = kwargs['form'].save(commit=False)
+        address = kwargs['address_form'].save()
+        branch.address = address
+        branch.save()
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, **kwargs):
+        context = self.get_context_data(form=kwargs['form'], address_form=kwargs['address_form'])
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        forms = {
+            'form': self.get_form(),
+            'address_form': self.get_address_form()
+        }
+        if forms['form'].is_valid() and forms['address_form'].is_valid():
+            return self.form_valid(**forms)
+        else:
+            return self.form_invalid(**forms)
+
+    def get_success_url(self):
+        return reverse_lazy('merchantapp:branches')
+
+
 class OrderProcessingView(ListView):
     model = Order
     template_name = 'orders/order_list.html'
@@ -139,7 +191,7 @@ class OrderCreateView(CreateView):
             order.completion_date = timezone.now()
             order.save()
             add_user_reward(customer, order.program)
-            send_notification_to_bot("Заказ выполнен.")
+            send_notification_to_bot(customer, f'Заказ на сумму {order.price * order.amount} тенге выполнен.')
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
@@ -157,6 +209,7 @@ def add_user_reward(customer, program):
                                              if last_obtained_reward else datetime.datetime(1970, 1, 1)).count()
     if last_orders_count == program.condition.amount:
         UserReward.objects.create(user_id=customer, program=program)
+        send_notification_to_bot(customer, 'Получена новая награда!')
 
 
 def redeem_user_reward(request, **kwargs):
@@ -165,6 +218,8 @@ def redeem_user_reward(request, **kwargs):
     if reward:
         reward.redeemed = True
         reward.save()
+        send_notification_to_bot(user.id,
+                                 'Вы забрали свою награду. Продолжайте выполнять заказы и получайте новые награды!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -180,8 +235,9 @@ def download_customers_file(request, **kwargs):
     return response
 
 
-def send_notification_to_bot(message):
-    url = 'https://api.telegram.org/bot5018591042:AAF7puGCIWgLn4vAL9mb4KMfsz9pYV0Yy3M/sendMessage'
-    params = {'chat_id': 42300657,
+def send_notification_to_bot(user_id, message):
+    user = get_object_or_404(get_user_model(), id=user_id)
+    url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
+    params = {'chat_id': user.tg_id,
               'text': message}
     r = requests.get(url, params)
