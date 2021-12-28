@@ -59,8 +59,8 @@ def awards(update: Update, context: CallbackContext):
             user_rewards_reply += '❤️‍🔥 '
         else:
             user_rewards_reply += "🤍 "
-    user_rewards_reply += f"\n\nЗавершите ещё {int(response['program']) - int(response['completed_orders'])}" \
-                          f" заказа для получения награды.\n\n" \
+    user_rewards_reply += f"\n\nНеобходимо заказов для получения награды: " \
+                          f"{int(response['program']) - int(response['completed_orders'])}.\n\n" \
                           f"Доступно наград: {response['active_rewards']}."
     context.bot.send_message(chat_id=update.effective_chat.id, text=user_rewards_reply, )
 
@@ -69,7 +69,9 @@ def register(update: Update, context: CallbackContext):
     if update.message.contact.user_id == update.message.chat_id:
         url = 'http://localhost:8002/api/users/create/'
         data = {'phone': update.message.contact.phone_number.replace('+', ''),
-                'tg_id': update.message.contact.user_id}
+                'tg_id': update.message.contact.user_id,
+                'first_name': update.message.contact.first_name,
+                'last_name': update.message.contact.last_name}
         response = requests.post(url, data=data)
         generate_qr(update, update.message.contact)
         if str(response.status_code).startswith('2'):
@@ -85,7 +87,7 @@ def do_echo(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     text = update.message.text
     update.message.reply_text(
-        text=f"Yo {text}"
+        text=f"{text}"
     )
 
 

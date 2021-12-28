@@ -6,13 +6,14 @@ from merchantapp.models import Branch, Article , UserReward
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('phone', 'tg_id')
+        fields = ('phone', 'tg_id', 'first_name', 'last_name')
 
 
 class BranchWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
         fields = "__all__"
+
 
 class BranchReadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,6 +26,7 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
         model = Article
         fields = "__all__"
 
+
 class ArticleReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
@@ -35,6 +37,7 @@ class UserRewardWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserReward
         fields = "__all__"
+
 
 class UserRewardReadSerializer(serializers.ModelSerializer):
     class Meta:
