@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db import models
+from django.db import models, transaction
 
 status_choices = [
     ('RETURNED', 'Возвращён'),
@@ -47,6 +47,7 @@ class Address(BaseModel):
     building = models.CharField(max_length=20, verbose_name='Здание')
     apartment = models.CharField(max_length=20, blank=True, null=True, verbose_name='Офис')
     city = models.CharField(max_length=50, verbose_name='Город')
+    link2gis = models.URLField(verbose_name='Ссылка на 2GIS')
     latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='Широта')
     longitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='Долгота')
 

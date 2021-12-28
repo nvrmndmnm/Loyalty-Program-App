@@ -8,9 +8,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from merchantapp.models import Branch, Order, UserReward
-from clientapi.serializers import UserSerializer, BranchWriteSerializer, BranchReadSerializer,\
+from clientapi.serializers import UserSerializer, BranchWriteSerializer, BranchReadSerializer, \
     ArticleWriteSerializer, ArticleReadSerializer, UserRewardWriteSerializer, UserRewardReadSerializer
-from merchantapp.models import Branch, Article, UserReward
+from merchantapp.models import Branch, Article, UserReward, Program, ProgramCondition
 
 
 class UserCreateAPIView(CreateAPIView, UpdateAPIView):
@@ -19,7 +19,10 @@ class UserCreateAPIView(CreateAPIView, UpdateAPIView):
     lookup_field = 'phone'
 
     def get_object(self):
-        return get_object_or_404(get_user_model(), phone=self.request.data['phone'])
+        try:
+            return get_object_or_404(get_user_model(), phone=self.request.data['phone'])
+        except:
+            return None
 
     def post(self, request, *args, **kwargs):
         customer = self.get_object()
@@ -60,11 +63,16 @@ class UserRewardViewSet(ModelViewSet):
 
 
 @api_view(['GET'])
-def get_user_progress(request, phone):
-    last_obtained_reward = UserReward.objects.filter(user__phone=phone).order_by('-time_created').first()
-    last_orders_count = Order.objects.filter(user__phone=phone,
+def get_user_progress(request, tg_id):
+    user = get_object_or_404(get_user_model(), tg_id=tg_id)
+    active_rewards = UserReward.objects.filter(user__phone=user.phone, redeemed=False).count()
+    last_obtained_reward = UserReward.objects.filter(user__phone=user.phone).order_by('-time_created').first()
+    last_orders_count = Order.objects.filter(user__phone=user.phone,
                                              status='FINISHED',
                                              program=1,
                                              completion_date__gt=last_obtained_reward.time_created
                                              if last_obtained_reward else datetime.datetime(1970, 1, 1)).count()
-    return Response({"message": f"{last_orders_count}"})
+    required_orders = Program.objects.get(id=1).condition.amount
+    return Response({"completed_orders": f"{last_orders_count}",
+                     "program": f"{required_orders}",
+                     "active_rewards": f"{active_rewards}"})
