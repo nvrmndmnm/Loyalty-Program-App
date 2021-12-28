@@ -21,7 +21,7 @@ def get_base_reply_keyboard():
     keyboard = [
         [KeyboardButton(BUTTON1_ESTABLISHMENTS), KeyboardButton(BUTTON2_NEWS)],
         [KeyboardButton(BUTTON3_AWARDS), KeyboardButton(BUTTON4_SETTINGS)],
-        [KeyboardButton(BUTTON5_QR, request_contact=True)]
+        [KeyboardButton(BUTTON5_QR)]
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
