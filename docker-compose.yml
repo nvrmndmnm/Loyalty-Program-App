@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        STATIC_URL: '/static/'
+    restart: unless-stopped
+    networks:
+      - loyalty-backend-tier
+    env_file: common.env
+    depends_on:
+      - db
+
+  db:
+    image: library/postgres:11.1-alpine
+    restart: unless-stopped
+    networks:
+      - loyalty-backend-tier
+    volumes:
+      - loyalty-db:/var/lib/postgresql
+    environment:
+      - POSTGRES_USER=loyalty
+      - POSTGRES_PASSWORD=loyalty
+
+volumes:
+  loyalty-db:
+    driver: local
+
+networks:
+  loyalty-backend-tier:
+    driver: bridge

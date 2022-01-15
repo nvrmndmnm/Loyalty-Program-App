@@ -5,3 +5,6 @@ __pycache__
 **.pyc
 conf.py
 LoyaltyBot/temp/qr/*
+/.env
+/source/static/
+/media/

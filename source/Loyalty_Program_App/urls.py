@@ -9,4 +9,9 @@ urlpatterns = [
                   path('', include('merchantapp.urls')),
                   path('api/', include("clientapi.urls")),
                   path('web/', include('webapp.urls'))
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ]
+
+# in production all static and media files must not be served via django
+if settings.ENVIRONMENT == 'development':
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
+                   static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

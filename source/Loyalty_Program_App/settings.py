@@ -10,8 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import ast
+import os.path
 from pathlib import Path
-import conf
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def get_list(text):
+    return [item.strip() for item in text.split(',')]
+
+
+def get_bool_from_env(name, default_value):
+    if name in os.environ:
+        value = os.environ[name]
+        try:
+            return ast.literal_eval(value)
+        except ValueError as e:
+            raise ValueError('{} is an invalid value for {}'.format(value, name)) from e
+    return default_value
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +40,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#a&91+*#skyw0jgmp&_o*@i^1d7p9o^7+_aiu^m=qdct5-bd7b'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-#a&91+*#skyw0jgmp&_o*@i^1d7p9o^7+_aiu^m=qdct5-bd7b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_bool_from_env('DEBUG', True)
 
 ALLOWED_HOSTS = []
 
@@ -81,12 +100,12 @@ WSGI_APPLICATION = 'Loyalty_Program_App.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER': conf.mysql_credentials['username'],
-        'PASSWORD': conf.mysql_credentials['password'],
-        'HOST': 'localhost',
-        'PORT': ''
+        'ENGINE':  os.getenv('DB_ENGINE', 'django.db.backends.mysql'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432')
     }
 }
 
@@ -127,7 +146,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = os.getenv('STATIC_URL', '/static/')
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
@@ -139,3 +158,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+MEDIA_URL = os.getenv('MEDIA_URL', '/media/')
+PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(PROJECT_ROOT, 'media'))
+STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(PROJECT_ROOT, 'static'))
