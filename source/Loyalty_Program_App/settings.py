@@ -105,7 +105,7 @@ DATABASES = {
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432')
+        'PORT': os.getenv('DB_PORT', '3306')
     }
 }
 
@@ -164,3 +164,4 @@ MEDIA_URL = os.getenv('MEDIA_URL', '/media/')
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(PROJECT_ROOT, 'media'))
 STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(PROJECT_ROOT, 'static'))
+TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN', '')

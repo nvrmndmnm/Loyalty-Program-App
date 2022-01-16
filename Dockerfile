@@ -38,10 +38,14 @@ RUN mkdir -p /app/media /app/static \
 
 RUN STATIC_ROOT=${STATIC_ROOT} python3 ./source/manage.py collectstatic --no-input
 
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN  chmod +x /docker-entrypoint.sh
+
 EXPOSE 8000
 ENV PORT 8000
 ENV PYTHONUNBUFFERED 1
 ENV PROCESSES 4
 
 USER loyalty
+#CMD ["/docker-entrypoint.sh"]
 CMD ["uwsgi", "--ini", "/app/source/Loyalty_Program_App/wsgi/uwsgi.ini"]

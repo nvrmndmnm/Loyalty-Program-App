@@ -9,3 +9,4 @@ uplink==0.9.4
 uwsgi==2.0.18 ; platform_system != 'Windows'
 python-dotenv==0.19.2
 psycopg2-binary==2.8.3
+qrcode[pil]==7.3.1

@@ -1,4 +1,4 @@
-from conf import tg_bot_token
+from django.conf import settings
 import datetime
 import requests
 from django.utils import timezone
@@ -9,8 +9,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView
-from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
-from merchantapp.models import Program,Branch, Order, UserReward
+from .forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
+from .models import Program, Branch, Order, UserReward
 
 
 class CustomerSearchView(ListView):
@@ -237,7 +237,7 @@ def download_customers_file(request, **kwargs):
 
 def send_notification_to_bot(user_id, message):
     user = get_object_or_404(get_user_model(), id=user_id)
-    url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
+    url = f'https://api.telegram.org/{settings.TG_BOT_TOKEN}/sendMessage'
     params = {'chat_id': user.tg_id,
               'text': message}
     r = requests.get(url, params)

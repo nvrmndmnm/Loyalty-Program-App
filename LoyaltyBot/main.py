@@ -5,8 +5,8 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
 from uplink import Consumer, returns, get
-from buttons import get_register_keyboard, get_base_reply_keyboard
-from config import TG_TOKEN
+from .buttons import get_register_keyboard, get_base_reply_keyboard
+from .config import TG_TOKEN
 import requests
 import qrcode
 

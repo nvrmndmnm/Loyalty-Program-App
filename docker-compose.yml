@@ -10,8 +10,6 @@ services:
     restart: unless-stopped
     env_file:
       - common.env
-    environment:
-      - DB_ENGINE=django.db.backends.postgresql_psycopg2
     depends_on:
       - db
     expose:
@@ -19,6 +17,8 @@ services:
     volumes:
       # shared volume for media
       - loyalty-media:/app/media
+    networks:
+      - loyalty-backend-tier
 
   nginx:
     build:
@@ -27,20 +27,24 @@ services:
     container_name: nginx
     restart: always
     ports:
-    - "80:80"
+      - "80:80"
+    networks:
+      - loyalty-backend-tier
+    depends_on:
+      - web
 
   db:
-    image: mysql
+    image: mysql:5.7
     restart: always
     environment:
       MYSQL_USER: loyalty
       MYSQL_ROOT_PASSWORD: loyalty
       MYSQL_PASSWORD: loyalty
       MYSQL_DATABASE: loyalty
-    ports:
-      - "5432:5432"
     volumes:
       - loyalty-db:/var/lib/mysql
+    networks:
+      - loyalty-backend-tier
 
 #  db:
 #    image: library/postgres:11.1-alpine
@@ -58,7 +62,7 @@ services:
 volumes:
   loyalty-media:
   loyalty-db:
-#    driver: local
+    driver: local
 
 networks:
   loyalty-backend-tier:
