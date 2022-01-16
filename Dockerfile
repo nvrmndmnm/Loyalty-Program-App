@@ -15,11 +15,15 @@ RUN apt-get update \
   shared-mime-info \
   mime-support \
   libpq5 \
+  default-libmysqlclient-dev \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
 ARG STATIC_URL
 ENV STATIC_URL ${STATIC_URL:-/static/}
+
+ARG STATIC_ROOT
+ENV STATIC_ROOT ${STATIC_ROOT:-/app/static/}
 
 RUN groupadd -r loyalty && useradd -r -g loyalty loyalty
 
@@ -32,7 +36,7 @@ WORKDIR /app
 RUN mkdir -p /app/media /app/static \
   && chown -R loyalty:loyalty /app/
 
-RUN STATIC_URL=${STATIC_URL} python3 ./source/manage.py collectstatic --no-input
+RUN STATIC_ROOT=${STATIC_ROOT} python3 ./source/manage.py collectstatic --no-input
 
 EXPOSE 8000
 ENV PORT 8000

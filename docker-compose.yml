@@ -1,5 +1,4 @@
-version: '2'
-
+version: '3.7'
 services:
   web:
     build:
@@ -7,27 +6,59 @@ services:
       dockerfile: ./Dockerfile
       args:
         STATIC_URL: '/static/'
+    container_name: web
     restart: unless-stopped
-    networks:
-      - loyalty-backend-tier
-    env_file: common.env
+    env_file:
+      - common.env
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql_psycopg2
     depends_on:
       - db
+    expose:
+      - 8000
+    volumes:
+      # shared volume for media
+      - loyalty-media:/app/media
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+    - "80:80"
 
   db:
-    image: library/postgres:11.1-alpine
-    restart: unless-stopped
-    networks:
-      - loyalty-backend-tier
-    volumes:
-      - loyalty-db:/var/lib/postgresql
+    image: mysql
+    restart: always
     environment:
-      - POSTGRES_USER=loyalty
-      - POSTGRES_PASSWORD=loyalty
+      MYSQL_USER: loyalty
+      MYSQL_ROOT_PASSWORD: loyalty
+      MYSQL_PASSWORD: loyalty
+      MYSQL_DATABASE: loyalty
+    ports:
+      - "5432:5432"
+    volumes:
+      - loyalty-db:/var/lib/mysql
+
+#  db:
+#    image: library/postgres:11.1-alpine
+#    restart: unless-stopped
+#    networks:
+#      - loyalty-backend-tier
+#    volumes:
+#      - loyalty-db:/var/lib/postgresql
+#    environment:
+#      - POSTGRES_USER=loyalty
+#      - POSTGRES_PASSWORD=loyalty
+#    ports:
+#      - 5432:5432
 
 volumes:
+  loyalty-media:
   loyalty-db:
-    driver: local
+#    driver: local
 
 networks:
   loyalty-backend-tier:
