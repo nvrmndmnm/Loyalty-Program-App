@@ -1,0 +1,315 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-17 20:36+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Loyalty_Program_App/settings.py:137
+msgid "Russian"
+msgstr "Орысша"
+
+#: Loyalty_Program_App/settings.py:138
+msgid "Kazakh"
+msgstr "Қазақша"
+
+#: accounts/models.py:10
+msgid "TheGivenPhoneMustBeSet"
+msgstr "Берілген телефон орнатылуы керек"
+
+#: accounts/models.py:36
+msgid "PhoneValidatorMessage"
+msgstr "Телефон нөмірі келесі форматта енгізілуі керек: '+77071234567'"
+
+#: accounts/models.py:37
+msgid "PhoneNumber"
+msgstr "Телефон нөмірі"
+
+#: accounts/models.py:38
+msgid "HelpTextPhone"
+msgstr "+7 арқылы 10 таңбалы телефон нөмірін енгізіңіз"
+
+#: accounts/models.py:39
+msgid "TelegramID"
+msgstr "Телеграмма идентификаторы"
+
+#: accounts/models.py:40
+msgid "DateOfBirth"
+msgstr "Туған жылы"
+
+#: accounts/models.py:41 accounts/templates/user_detail.html:16
+msgid "Name"
+msgstr "Аты"
+
+#: accounts/models.py:42
+msgid "Email"
+msgstr "Электрондық пошта"
+
+#: accounts/templates/change_password.html:4
+msgid "ChangingPasswordTitle"
+msgstr ""
+
+#: accounts/templates/change_password.html:8
+msgid "ChangePassword"
+msgstr "Құпия сөзді өзгерту"
+
+#: accounts/templates/change_password.html:13
+msgid "ChangeButton"
+msgstr "Өзгерту"
+
+#: accounts/templates/edit_profile.html:4
+msgid "EditingTitle"
+msgstr "Өзгерту"
+
+#: accounts/templates/edit_profile.html:8
+msgid "EditProfile"
+msgstr "Профильді өзгерту"
+
+#: accounts/templates/edit_profile.html:13
+msgid "EditButton"
+msgstr "Өзгерту"
+
+#: accounts/templates/user_detail.html:4 merchantapp/models.py:111
+#: merchantapp/models.py:125
+msgid "User"
+msgstr "Пайдаланушы"
+
+#: accounts/templates/user_detail.html:9
+msgid "Profile"
+msgstr "Профиль"
+
+#: accounts/templates/user_detail.html:11
+msgid "EditProfileLink"
+msgstr "Профильді өзгерту"
+
+#: accounts/templates/user_detail.html:12
+msgid "ChangePasswordLink"
+msgstr "Құпия сөзді өзгерту"
+
+#: accounts/templates/user_detail.html:14
+msgid "User's phone number: "
+msgstr "Пайдаланушының телефон нөмірі: "
+
+#: merchantapp/models.py:7
+msgid "Returned"
+msgstr "Қайтарылды"
+
+#: merchantapp/models.py:8
+msgid "Finished"
+msgstr "Аяқталды"
+
+#: merchantapp/models.py:11
+msgid "Catering"
+msgstr "Кофеханалар, мейрамханалар"
+
+#: merchantapp/models.py:12
+msgid "Car"
+msgstr "Автокөлікке техникалық қызмет көрсету"
+
+#: merchantapp/models.py:17
+msgid "TimeCreated"
+msgstr "Құрылған уақыт"
+
+#: merchantapp/models.py:18
+msgid "TimeUpdated"
+msgstr "Жаңартылған уақыт"
+
+#: merchantapp/models.py:19
+msgid "Active"
+msgstr "Іске қосу"
+
+#: merchantapp/models.py:26 merchantapp/models.py:37 merchantapp/models.py:61
+#: merchantapp/models.py:85 merchantapp/models.py:102
+msgid "Identifier"
+msgstr "Идентификатор"
+
+#: merchantapp/models.py:27 merchantapp/models.py:38 merchantapp/models.py:62
+#: merchantapp/models.py:86 merchantapp/models.py:103
+#: merchantapp/templates/program.html:10
+msgid "Title"
+msgstr "Тақырып"
+
+#: merchantapp/models.py:29
+msgid "Supervisor"
+msgstr "Жетекші"
+
+#: merchantapp/models.py:30
+msgid "Category"
+msgstr "Санат"
+
+#: merchantapp/models.py:39
+msgid "Partner"
+msgstr "Серіктес"
+
+#: merchantapp/models.py:41 merchantapp/models.py:69
+#: merchantapp/templates/program.html:13
+msgid "Description"
+msgstr "Сипаттама"
+
+#: merchantapp/models.py:48
+msgid "Street"
+msgstr "Көше"
+
+#: merchantapp/models.py:49
+msgid "Building"
+msgstr "Ғимарат"
+
+#: merchantapp/models.py:50
+msgid "Office"
+msgstr "Кеңсе"
+
+#: merchantapp/models.py:51
+msgid "City"
+msgstr "Қала"
+
+#: merchantapp/models.py:52
+msgid "LinkTo2GIS"
+msgstr "2GIS-ке сілтеме"
+
+#: merchantapp/models.py:53
+msgid "Latitude"
+msgstr "Ендік"
+
+#: merchantapp/models.py:54
+msgid "Longitude"
+msgstr "Бойлық"
+
+#: merchantapp/models.py:64 merchantapp/templates/program.html:11
+msgid "Condition"
+msgstr "Шарт"
+
+#: merchantapp/models.py:65 merchantapp/templates/program.html:12
+msgid "Reward"
+msgstr "Сыйлық"
+
+#: merchantapp/models.py:66
+msgid "Branch"
+msgstr "Мекеме"
+
+#: merchantapp/models.py:67
+msgid "StartDate"
+msgstr "Басталған күн"
+
+#: merchantapp/models.py:68 merchantapp/models.py:113
+msgid "EndDate"
+msgstr "Аяқталған күн"
+
+#: merchantapp/models.py:77
+msgid "RewardType"
+msgstr "Сыйлық түрі"
+
+#: merchantapp/models.py:78 merchantapp/models.py:95 merchantapp/models.py:114
+msgid "Amount"
+msgstr "Саны"
+
+#: merchantapp/models.py:94
+msgid "ConditionType"
+msgstr "Шарт түрі"
+
+#: merchantapp/models.py:112
+msgid "Status"
+msgstr "Статус"
+
+#: merchantapp/models.py:115
+msgid "Price"
+msgstr "Баға"
+
+#: merchantapp/models.py:117 merchantapp/models.py:127
+msgid "Program"
+msgstr "Программа"
+
+#: merchantapp/models.py:128
+msgid "ExpireDate"
+msgstr "Қолданылу мерзімі"
+
+#: merchantapp/models.py:129
+msgid "Redeemed"
+msgstr "Өтелді"
+
+#: merchantapp/models.py:136
+msgid "TitleZ"
+msgstr "Тақырып"
+
+#: merchantapp/models.py:137
+msgid "Text"
+msgstr "Мәтін"
+
+#: merchantapp/models.py:139
+msgid "Author"
+msgstr "Автор"
+
+#: merchantapp/templates/base.html:23
+msgid "MainLink"
+msgstr "Негізгі сілтеме"
+
+#: merchantapp/templates/base.html:31
+msgid "ProgramsLink"
+msgstr "Бағдарламалар"
+
+#: merchantapp/templates/base.html:34
+msgid "BranchLink"
+msgstr "Мекемелер"
+
+#: merchantapp/templates/base.html:37
+msgid "Clients"
+msgstr "Клиенттер"
+
+#: merchantapp/templates/base.html:40
+msgid "Logout"
+msgstr "Шығу"
+
+#: merchantapp/templates/base.html:44
+msgid "Login"
+msgstr "Кіру"
+
+#: merchantapp/templates/index.html:8
+msgid "Search"
+msgstr "Іздеу"
+
+#: merchantapp/templates/index.html:17
+msgid "Available awards:"
+msgstr "Қолжетімді марапаттар:"
+
+#: merchantapp/templates/index.html:21
+msgid "Completed Orders:"
+msgstr "Аяқталған тапсырыстар:"
+
+#: merchantapp/templates/index.html:23
+msgid "Issue a reward"
+msgstr "Сыйлық шығару"
+
+#: merchantapp/templates/index.html:24
+msgid "Checkout"
+msgstr "Тапсырыс беру"
+
+#: merchantapp/templates/index.html:25
+msgid "Purchase history"
+msgstr "Тапсырыс тарихы"
+
+#: merchantapp/templates/program.html:4
+msgid "Programs"
+msgstr "Бағдарламалар"
+
+#: merchantapp/templates/program.html:5
+msgid "Add program"
+msgstr "Бағдарлама қосу"
+
+#: merchantapp/templates/program.html:14
+msgid "Actions"
+msgstr "Әрекеттер"
+
+#: merchantapp/templates/program.html:25
+msgid "Refresh"
+msgstr "Жаңарту"

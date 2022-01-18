@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Update {{ user_object.username }}{% endblock %}
+{% block title %}{% trans "EditingTitle" %} {{ user_object.username }}{% endblock %}
 
 {% block content %}
 
-    <h1 class="text-center">EditProfile</h1>
+    <h1 class="text-center">{% trans "EditProfile" %}</h1>
 
     <form action="{% url "accounts:edit_profile" user_object.pk %}" method="post">
         {% csrf_token %}
         {{ form }}
-        <button class="btn btn-success" style="width: 100%">Edit</button>
+        <button class="btn btn-success" style="width: 100%">{% trans "EditButton" %}</button>
     </form>
 
 {% endblock %}

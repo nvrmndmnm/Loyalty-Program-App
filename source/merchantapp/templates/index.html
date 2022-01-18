@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load merchant_tags %}
 {% block content %}
     <form method="get" action={% url 'merchantapp:user_search' %}>
         <div class="input-group">
             <input class="form-control border" type="search" name="id" placeholder="Search">
-            <button class="btn btn-secondary" type="submit">Search</button>
+            <button class="btn btn-secondary" type="submit">{% trans "Search" %}</button>
         </div>
     </form>
     {% if customuser_list %}
@@ -13,15 +14,15 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ user }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ user.first_name }} {{ user.last_name }}</h6>
-                    <p class="card-text">Доступно наград: {{ user.user_reward.all|redeemable_count }}</p>
+                    <p class="card-text">{% blocktrans %}Available awards:{% endblocktrans %} {{ user.user_reward.all|redeemable_count }}</p>
                     {% for reward in user.user_reward.all %}
                         {{ reward.get_redeemable }}
                         {% endfor %}
-                    <p class="card-text">Завершено заказов: {{ user.order_user.count }}</p>
+                    <p class="card-text">{% blocktrans %}Completed Orders:{% endblocktrans %} {{ user.order_user.count }}</p>
                     <a class="btn btn-sm btn-secondary me-2 {% if user.user_reward.all|redeemable_count == 0 %}disabled{% endif %}"
-                       href="{% url 'merchantapp:redeem_user_reward' user.pk %}">Выдать награду</a>
-                    <a class="btn btn-sm btn-secondary me-2" href="{% url 'merchantapp:order_create' %}?customer={{ user.pk }}">Оформить заказ</a>
-                    <a class="btn btn-sm btn-secondary" href="{% url 'merchantapp:orders' user.pk %}">История заказов</a>
+                       href="{% url 'merchantapp:redeem_user_reward' user.pk %}">{% blocktrans %}Issue a reward{% endblocktrans %}</a>
+                    <a class="btn btn-sm btn-secondary me-2" href="{% url 'merchantapp:order_create' %}?customer={{ user.pk }}">{% trans "Checkout" %}</a>
+                    <a class="btn btn-sm btn-secondary" href="{% url 'merchantapp:orders' user.pk %}">{% blocktrans %}Purchase history{% endblocktrans %}</a>
                 </div>
             </div>
         {% endfor %}

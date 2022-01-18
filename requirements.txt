@@ -7,3 +7,4 @@ sqlparse==0.4.2
 python-telegram-bot==12
 uplink==0.9.4
 uwsgi==2.0.18
+django-modeltranslation==0.17.3

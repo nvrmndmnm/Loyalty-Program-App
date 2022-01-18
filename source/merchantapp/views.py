@@ -1,4 +1,4 @@
-from conf import tg_bot_token
+# from conf import tg_bot_token
 import datetime
 import requests
 from django.utils import timezone
