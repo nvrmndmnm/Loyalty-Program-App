@@ -27,7 +27,7 @@ def help(update: Update, context: CallbackContext):
 
 
 def sendRequest():
-    response = requests.get('http://localhost:8002/api/branches/').json()
+    response = requests.get('http://94.130.26.171:8000/api/branches/').json()
     return response
 
 
@@ -37,7 +37,8 @@ def establishments(update: Update, context: CallbackContext):
     for i in loyaltyapi.get_repos('branches'):
         branches += f'Название {i["name"]}\n' \
                     f'Aдрес: {i["address"]}\n' \
-                    f'{i["description"]}\n\n'
+                    f'{i["description"]}\n\n' \
+                    f'{i["link2gis"]}'
     context.bot.send_message(chat_id=update.effective_chat.id, text=branches, )
 
 
@@ -67,7 +68,7 @@ def awards(update: Update, context: CallbackContext):
 
 def register(update: Update, context: CallbackContext):
     if update.message.contact.user_id == update.message.chat_id:
-        url = 'http://localhost:8002/api/users/create/'
+        url = 'http://94.130.26.171:8000/api/users/create/'
         data = {'phone': update.message.contact.phone_number.replace('+', ''),
                 'tg_id': update.message.contact.user_id,
                 'first_name': update.message.contact.first_name,
@@ -144,7 +145,7 @@ class LoyaltyApi(Consumer):
         pass
 
 
-loyaltyapi = LoyaltyApi(base_url="http://localhost:8002/api/")
+loyaltyapi = LoyaltyApi(base_url="http://94.130.26.171:8000/api/")
 
 if __name__ == '__main__':
     main()
