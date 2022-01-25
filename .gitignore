@@ -4,4 +4,5 @@ venv
 __pycache__
 **.pyc
 conf.py
-LoyaltyBot/temp/qr/*
+LoyaltyBot/uploads/qr/*
+LoyaltyBot/.env

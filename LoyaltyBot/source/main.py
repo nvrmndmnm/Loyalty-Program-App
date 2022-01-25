@@ -1,13 +1,12 @@
-from telegram import Bot, InlineKeyboardButton
+from telegram import Bot
 from telegram import Update
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
-from uplink import Consumer, returns, get
+from uplink import Consumer, returns, get, post, Body
 from buttons import get_register_keyboard, get_base_reply_keyboard
 from config import TG_TOKEN
-import requests
 import qrcode
 
 
@@ -26,33 +25,28 @@ def help(update: Update, context: CallbackContext):
                              text='Помощь')
 
 
-def sendRequest():
-    response = requests.get('http://localhost:8002/api/branches/').json()
-    return response
-
-
-# Оброботка клавиатуры
-def establishments(update: Update, context: CallbackContext):
+# Обработка клавиатуры
+def branches(update: Update, context: CallbackContext):
     branches = ''
-    for i in loyaltyapi.get_repos('branches'):
+    for i in loyaltyAPI.get_request('branches'):
         branches += f'Название {i["name"]}\n' \
                     f'Aдрес: {i["address"]}\n' \
                     f'{i["description"]}\n\n'
     context.bot.send_message(chat_id=update.effective_chat.id, text=branches, )
 
 
-# оброботчик кнопки новостей
+# Обработчик кнопки новостей
 def news(update: Update, context: CallbackContext):
     articles = ''
-    for i in loyaltyapi.get_repos('articles'):
+    for i in loyaltyAPI.get_request('articles'):
         articles += f'{i["time_created"][:10]}\n' \
                     f'{i["title"]}\n' \
                     f'{i["text"]}\n\n'
     context.bot.send_message(chat_id=update.effective_chat.id, text=articles, )
 
 
-def awards(update: Update, context: CallbackContext):
-    response = loyaltyapi.get_repos(f'users/{update.effective_user.id}/progress')
+def rewards(update: Update, context: CallbackContext):
+    response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
     for i in range(int(response['program'])):
         if i < int(response['completed_orders']):
@@ -67,12 +61,11 @@ def awards(update: Update, context: CallbackContext):
 
 def register(update: Update, context: CallbackContext):
     if update.message.contact.user_id == update.message.chat_id:
-        url = 'http://localhost:8002/api/users/create/'
         data = {'phone': update.message.contact.phone_number.replace('+', ''),
                 'tg_id': update.message.contact.user_id,
                 'first_name': update.message.contact.first_name,
                 'last_name': update.message.contact.last_name}
-        response = requests.post(url, data=data)
+        response = loyaltyAPI.post_request('users/create', **data)
         generate_qr(update, update.message.contact)
         if str(response.status_code).startswith('2'):
             reply_text = 'Вы успешно авторизованы.'
@@ -83,24 +76,20 @@ def register(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text, reply_markup=get_base_reply_keyboard())
 
 
-def do_echo(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-    text = update.message.text
-    update.message.reply_text(
-        text=f"{text}"
-    )
-
-
 def generate_qr(update, contact):
     phone_number = contact.phone_number.replace('+', '')
     img = qrcode.make(phone_number)
-    img.save(f'temp/qr/{update.message.chat_id}.png')
+    img.save(f'./uploads/qr/{update.message.chat_id}.png')
 
 
 def display_qr(update, context):
-    with open(f'temp/qr/{update.message.chat_id}.png', 'rb') as qr_png:
-        context.bot.sendPhoto(chat_id=update.message.chat_id, photo=qr_png,
-                              caption='Покажите ваш QR-код кассиру.')
+    try:
+        with open(f'./uploads/qr/{update.message.chat_id}.png', 'rb') as qr_png:
+            context.bot.sendPhoto(chat_id=update.message.chat_id, photo=qr_png,
+                                  caption='Покажите ваш QR-код кассиру.')
+    except IOError:
+        reply_text = 'Не удалось загрузить QR-код. Пожалуйста, перезапустите бота командой /start'
+        context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text)
 
 
 def main():
@@ -109,23 +98,21 @@ def main():
     )
     updater = Updater(TG_TOKEN, use_context=True)
     updater.dispatcher.add_handler(CommandHandler('start', start))
+
     about_handler = CommandHandler('about', about)
-    help_handler = CommandHandler('help', help)
-    # echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
     updater.dispatcher.add_handler(about_handler)
+
+    help_handler = CommandHandler('help', help)
     updater.dispatcher.add_handler(help_handler)
-    # updater.dispatcher.add_handler(echo_handler)
 
-    # handler Для клавиатуры
-
-    establishments_handler = MessageHandler(Filters.regex('Заведения'), establishments)
-    updater.dispatcher.add_handler(establishments_handler)
+    branches_handler = MessageHandler(Filters.regex('Заведения'), branches)
+    updater.dispatcher.add_handler(branches_handler)
 
     news_handler = MessageHandler(Filters.regex('Новости'), news)
     updater.dispatcher.add_handler(news_handler)
 
-    awards_handler = MessageHandler(Filters.regex('Мои награды'), awards)
-    updater.dispatcher.add_handler(awards_handler)
+    rewards_handler = MessageHandler(Filters.regex('Мои награды'), rewards)
+    updater.dispatcher.add_handler(rewards_handler)
 
     qr_handler = MessageHandler(Filters.regex('QR код'), display_qr)
     updater.dispatcher.add_handler(qr_handler)
@@ -140,11 +127,15 @@ def main():
 class LoyaltyApi(Consumer):
     @returns.json
     @get("{path}/")
-    def get_repos(self, path):
+    def get_request(self, path):
+        pass
+
+    @post("{path}/")
+    def post_request(self, path, **body: Body):
         pass
 
 
-loyaltyapi = LoyaltyApi(base_url="http://localhost:8002/api/")
+loyaltyAPI = LoyaltyApi(base_url="http://localhost:8000/api/")
 
 if __name__ == '__main__':
     main()
