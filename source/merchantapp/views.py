@@ -1,6 +1,5 @@
 # from conf import tg_bot_token
 import datetime
-import requests
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -236,8 +235,9 @@ def download_customers_file(request, **kwargs):
 
 
 def send_notification_to_bot(user_id, message):
-    user = get_object_or_404(get_user_model(), id=user_id)
-    url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
-    params = {'chat_id': user.tg_id,
-              'text': message}
-    r = requests.get(url, params)
+    # user = get_object_or_404(get_user_model(), id=user_id)
+    # url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
+    # params = {'chat_id': user.tg_id,
+    #           'text': message}
+    # r = requests.get(url, params)
+    pass
