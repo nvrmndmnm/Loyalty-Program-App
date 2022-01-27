@@ -2,15 +2,20 @@ version: '3'
 
 services:
   db:
-    image: mysql
+    image: postgres:14.1
     ports:
-      - "3306:3306"
+      - "5432:5432"
     env_file:
       - .env
     volumes:
-      - ./mysql_data:/var/lib/mysql/
+      - postgres_data:/var/lib/postgresql/data/
+
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic && python manage.py migrate &&
+      gunicorn --bind 0.0.0.0:8000 Loyalty_Program_App.wsgi -w 3"
     volumes:
       - ./source:/code
     ports:
@@ -20,3 +25,17 @@ services:
     env_file:
       - .env
 
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/uploads
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
