@@ -14,7 +14,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: bash -c "python manage.py collectstatic && python manage.py migrate &&
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate &&
       gunicorn --bind 0.0.0.0:8000 Loyalty_Program_App.wsgi -w 3"
     volumes:
       - ./source:/code
