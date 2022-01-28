@@ -25,6 +25,18 @@ services:
     env_file:
       - .env
 
+  bot:
+    build:
+      context: ./LoyaltyBot
+      dockerfile: Dockerfile
+    command: bash -c "python main.py"
+    volumes:
+      - ./LoyaltyBot/source:/code/bot
+    depends_on:
+      - web
+    env_file:
+      - .env
+
   nginx:
     build: ./nginx
     ports:
@@ -34,8 +46,10 @@ services:
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/uploads
+      - bot_volume:/home/app/bot/media
 
 volumes:
   postgres_data:
   static_volume:
   media_volume:
+  bot_volume:

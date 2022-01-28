@@ -6,8 +6,13 @@ from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
 from uplink import Consumer, returns, get, post, Body
 from buttons import get_register_keyboard, get_base_reply_keyboard
-from config import TG_TOKEN
+from pathlib import Path
 import qrcode
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+TG_TOKEN = os.getenv('TG_TOKEN')
+SITE = os.getenv('TG_SITE')
 
 
 def start(update: Update, context: CallbackContext):
@@ -37,25 +42,35 @@ def branches(update: Update, context: CallbackContext):
 
 # Обработчик кнопки новостей
 def news(update: Update, context: CallbackContext):
-    articles = ''
-    for i in loyaltyAPI.get_request('articles'):
-        articles += f'{i["time_created"][:10]}\n' \
-                    f'{i["title"]}\n' \
-                    f'{i["text"]}\n\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=articles, )
+    response = loyaltyAPI.get_request('articles')
+    news_reply_message = 'Новостей пока нет, возвращайтесь позже!'
+    if response:
+        articles = ''
+        for i in response:
+            articles += f'{i["time_created"][:10]}\n' \
+                        f'{i["title"]}\n' \
+                        f'{i["text"]}\n\n'
+            news_reply_message = articles
+    context.bot.send_message(chat_id=update.effective_chat.id, text=news_reply_message, )
 
 
 def rewards(update: Update, context: CallbackContext):
     response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
-    for i in range(int(response['program'])):
-        if i < int(response['completed_orders']):
-            user_rewards_reply += '❤️‍🔥 '
-        else:
-            user_rewards_reply += "🤍 "
-    user_rewards_reply += f"\n\nНеобходимо заказов для получения награды: " \
-                          f"{int(response['program']) - int(response['completed_orders'])}.\n\n" \
-                          f"Доступно наград: {response['active_rewards']}."
+    print(response)
+    if not str(response.status_code).startswith('2'):
+        user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
+    if response.get('program'):
+        for i in range(int(response['program'])):
+            if i < int(response['completed_orders']):
+                user_rewards_reply += '❤️‍🔥 '
+            else:
+                user_rewards_reply += "🤍 "
+        user_rewards_reply += f"\n\nНеобходимо заказов для получения награды: " \
+                              f"{int(response['program']) - int(response['completed_orders'])}.\n\n" \
+                              f"Доступно наград: {response['active_rewards']}."
+    else:
+        user_rewards_reply = 'У вас пока нет завершённых заказов.'
     context.bot.send_message(chat_id=update.effective_chat.id, text=user_rewards_reply, )
 
 
@@ -78,13 +93,17 @@ def register(update: Update, context: CallbackContext):
 
 def generate_qr(update, contact):
     phone_number = contact.phone_number.replace('+', '')
-    img = qrcode.make(phone_number)
-    img.save(f'./uploads/qr/{update.message.chat_id}.png')
+    # img = qrcode.make(phone_number) # записать в QR-код только номер телефона
+    img = qrcode.make(f'{SITE}ru/s/?id={phone_number}')
+    try:
+        img.save(f'{BASE_DIR}/media/qr/{update.message.chat_id}.png')
+    except Exception as e:
+        print(e)
 
 
 def display_qr(update, context):
     try:
-        with open(f'./uploads/qr/{update.message.chat_id}.png', 'rb') as qr_png:
+        with open(f'{BASE_DIR}/media/qr/{update.message.chat_id}.png', 'rb') as qr_png:
             context.bot.sendPhoto(chat_id=update.message.chat_id, photo=qr_png,
                                   caption='Покажите ваш QR-код кассиру.')
     except IOError:
@@ -135,7 +154,7 @@ class LoyaltyApi(Consumer):
         pass
 
 
-loyaltyAPI = LoyaltyApi(base_url="http://localhost:8000/api/")
+loyaltyAPI = LoyaltyApi(base_url=f"{SITE}api/")
 
 if __name__ == '__main__':
     main()
