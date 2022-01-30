@@ -44,12 +44,9 @@ services:
     depends_on:
       - web
     volumes:
-      - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/uploads
-      - bot_volume:/home/app/bot/media
+      - ./source/static:/home/app/web/static
+      - ./source/uploads:/home/app/web/uploads
+      - ./LoyaltyBot/media:/home/app/bot/media
 
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:
-  bot_volume:

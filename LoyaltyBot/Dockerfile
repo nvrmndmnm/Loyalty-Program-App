@@ -8,10 +8,14 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 COPY . .
 
-COPY ./LoyaltyBot/requirements.txt .
+COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 FROM python:3.8.10
+
+RUN mkdir -p /home/app
+
+RUN groupadd --system app && useradd --system app -g app
 
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/bot
