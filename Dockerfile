@@ -1,15 +1,33 @@
-FROM python
-WORKDIR /code
-COPY requirements.txt /code/
-RUN  pip install --upgrade pip && pip install --no-cache -r requirements.txt
-RUN apt-get update \
-  && apt-get install -y \
-  shared-mime-info \
-  mime-support \
-  libpq5 \
-  default-libmysqlclient-dev \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
-COPY ./source /code
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+FROM python:3.8.10 as builder
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+COPY . .
+
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+FROM python:3.8.10
+
+RUN mkdir -p /home/app
+
+RUN groupadd --system app && useradd --system app -g app
+
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME && mkdir $APP_HOME/media
+WORKDIR $APP_HOME
+
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+COPY source $APP_HOME
+
+RUN chown -R app:app $APP_HOME
+
+USER app
