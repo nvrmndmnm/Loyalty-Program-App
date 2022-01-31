@@ -4,8 +4,7 @@ venv
 __pycache__
 **.pyc
 conf.py
-LoyaltyBot/media/qr/*
-LoyaltyBot/.env
+LoyaltyBot/media
 .env
 .env.dev
 source/static
