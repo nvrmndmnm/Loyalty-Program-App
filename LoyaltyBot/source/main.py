@@ -4,11 +4,14 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
-from uplink import Consumer, returns, get, post, Body
+from uplink import Consumer, returns, get, post, Body, json
 from buttons import get_register_keyboard, get_base_reply_keyboard
 from pathlib import Path
 import qrcode
 import os
+# from dotenv import load_dotenv
+# load_dotenv()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TG_TOKEN = os.getenv('TG_TOKEN')
@@ -57,7 +60,6 @@ def news(update: Update, context: CallbackContext):
 def rewards(update: Update, context: CallbackContext):
     response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
-    print(response)
     if not str(response.status_code).startswith('2'):
         user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
     if response.get('program'):
@@ -80,12 +82,15 @@ def register(update: Update, context: CallbackContext):
                 'tg_id': update.message.contact.user_id,
                 'first_name': update.message.contact.first_name,
                 'last_name': update.message.contact.last_name}
-        response = loyaltyAPI.post_request('users/create', **data)
-        generate_qr(update, update.message.contact)
-        if str(response.status_code).startswith('2'):
-            reply_text = 'Вы успешно авторизованы.'
+        response = loyaltyAPI.post_request("users/create", **data)
+        qr_result = generate_qr(update, update.message.contact)
+        if not qr_result:
+            reply_text = 'Произошла ошибка, попробуйте повторить регистрацию.'
         else:
-            reply_text = response.text
+            if str(response.status_code).startswith('2'):
+                reply_text = 'Вы успешно авторизованы.'
+            else:
+                reply_text = 'Произошла ошибка.'
     else:
         reply_text = 'Пожалуйста, укажите данные своего аккаунта.'
     context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text, reply_markup=get_base_reply_keyboard())
@@ -96,14 +101,18 @@ def generate_qr(update, contact):
     # img = qrcode.make(phone_number) # записать в QR-код только номер телефона
     img = qrcode.make(f'{SITE}ru/s/?id={phone_number}')
     try:
-        img.save(f'{BASE_DIR}/media/qr/{update.message.chat_id}.png')
+        filename = f'{BASE_DIR}/bot/media/qr/{update.message.chat_id}.png'
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        img.save(filename)
     except Exception as e:
         print(e)
+        return False
+    return True
 
 
 def display_qr(update, context):
     try:
-        with open(f'{BASE_DIR}/media/qr/{update.message.chat_id}.png', 'rb') as qr_png:
+        with open(f'{BASE_DIR}/bot/media/qr/{update.message.chat_id}.png', 'rb') as qr_png:
             context.bot.sendPhoto(chat_id=update.message.chat_id, photo=qr_png,
                                   caption='Покажите ваш QR-код кассиру.')
     except IOError:

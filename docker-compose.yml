@@ -30,7 +30,7 @@ services:
     build:
       context: ./LoyaltyBot
       dockerfile: Dockerfile
-    command: bash -c "python main.py"
+    command: bash -c "python -u main.py"
     volumes:
       - ./LoyaltyBot/source:/code/bot
     depends_on:
