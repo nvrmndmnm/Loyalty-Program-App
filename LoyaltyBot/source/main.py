@@ -1,3 +1,4 @@
+import requests
 from telegram import Bot
 from telegram import Update
 from telegram.ext import Updater
@@ -60,8 +61,8 @@ def news(update: Update, context: CallbackContext):
 def rewards(update: Update, context: CallbackContext):
     response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
-    if not str(response.status_code).startswith('2'):
-        user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
+    # if not str(response.status_code).startswith('2'):
+    #     user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
     if response.get('program'):
         for i in range(int(response['program'])):
             if i < int(response['completed_orders']):
@@ -156,6 +157,7 @@ class LoyaltyApi(Consumer):
     @returns.json
     @get("{path}/")
     def get_request(self, path):
+        print(path)
         pass
 
     @post("{path}/")
