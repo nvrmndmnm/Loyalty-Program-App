@@ -1,4 +1,3 @@
-import requests
 from telegram import Bot
 from telegram import Update
 from telegram.ext import Updater
@@ -10,8 +9,6 @@ from buttons import get_register_keyboard, get_base_reply_keyboard
 from pathlib import Path
 import qrcode
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -157,7 +154,6 @@ class LoyaltyApi(Consumer):
     @returns.json
     @get("{path}/")
     def get_request(self, path):
-        print(path)
         pass
 
     @post("{path}/")
