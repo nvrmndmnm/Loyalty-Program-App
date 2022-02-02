@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model, update_session_auth_hash
@@ -13,7 +13,9 @@ class RegisterView(CreateView):
     model = get_user_model()
     template_name = 'registration/register.html'
     form_class = UserAdminCreationForm
-    success_url = 'accounts:login'
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:login')
 
 
 class UserDetailsView(LoginRequiredMixin, DetailView):
