@@ -44,23 +44,23 @@
                         <a class="nav-link" href="{% url 'accounts:login' %}">{% trans "Login" %}</a>
                     </li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% get_language_info for LANGUAGE_CODE as current_language %}
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                        {{ current_language.name_local }}
-                    </a>
-                    <div class="dropdown-menu">
-                        {% for language in languages %}
-                            <a href="/{{ language.code }}{{ language_base_link }}" class="dropdown-item">
-                                {{ language.name_local }}({{ language.code }})
-                            </a>
-                        {% endfor %}
-                    </div>
-                </li>
             </ul>
+            <div class="dropdown">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% get_language_info for LANGUAGE_CODE as current_language %}
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ current_language.name_local }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    {% for language in languages %}
+                        <a href="/{{ language.code }}{{ language_base_link }}/" class="dropdown-item">
+                            <li><button class="dropdown-item" type="button">{{ language.name_local }}({{ language.code }})</button></li>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
