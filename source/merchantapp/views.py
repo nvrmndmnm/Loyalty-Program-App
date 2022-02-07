@@ -216,7 +216,10 @@ class OrderProcessingView(PermissionAccessMixin, ListView):
         return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
-        return super().get_queryset().filter()
+        queryset = super().get_queryset()
+        user = get_user_model().objects.get(pk=self.kwargs.get('pk'))
+        queryset = queryset.filter(user=user)
+        return queryset
 
 
 class OrderCreateView(PermissionAccessMixin, CreateView):
