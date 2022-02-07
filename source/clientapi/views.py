@@ -76,3 +76,10 @@ def get_user_progress(request, tg_id):
     return Response({"completed_orders": f"{last_orders_count}",
                      "program": f"{required_orders}",
                      "active_rewards": f"{active_rewards}"})
+
+
+def get_branch_info(request):
+    branches = Branch.objects.all()
+    return Response({
+        "branch_id": branches.all()
+    })
