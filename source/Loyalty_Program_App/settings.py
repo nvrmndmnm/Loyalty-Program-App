@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import conf
+import os
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.utils.translation import gettext_lazy as _
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -21,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#a&91+*#skyw0jgmp&_o*@i^1d7p9o^7+_aiu^m=qdct5-bd7b'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -81,15 +86,15 @@ WSGI_APPLICATION = 'Loyalty_Program_App.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER': conf.mysql_credentials['username'],
-        'PASSWORD': conf.mysql_credentials['password'],
-        'HOST': 'localhost',
-        'PORT': ''
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT')
+
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -113,7 +118,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+EXTRA_LANG_INFO = {
+    "kz": {
+        "bidi": False,
+        "code": "kz",
+        "name": "Kazakh",
+        "name_local": "Қазақша"
+    }
+}
+
+import django.conf.locale
+
+django.conf.locale.LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+
+LANGUAGE_CODE = 'ru'
+
+LANGUAGES = [
+    ("ru", _("Russian")),
+    ("kz", _("Kazakh"))
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locales")
+]
 
 TIME_ZONE = 'Asia/Almaty'
 
@@ -128,6 +155,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+MEDIA_URL = '/uploads/'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 

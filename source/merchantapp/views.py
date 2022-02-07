@@ -1,21 +1,32 @@
-from conf import tg_bot_token
+# from conf import tg_bot_token
 import datetime
-import requests
+
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
-from merchantapp.models import Program,Branch, Order, UserReward
+from merchantapp.models import Program, Branch, Order, UserReward, Merchant
 
 
-class CustomerSearchView(ListView):
+class PermissionAccessMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.groups.filter(name="merchant-manager") or \
+               self.request.user.groups.filter(name="staff")
+
+
+class CustomerSearchView(PermissionAccessMixin, ListView):
     model = get_user_model()
     template_name = 'index.html'
+
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get(self, request, *args, **kwargs):
         self.search_form = self.get_search_form()
@@ -31,7 +42,7 @@ class CustomerSearchView(ListView):
 
     def get_queryset(self):
         if self.search_value:
-            queryset = super().get_queryset()
+            queryset = super().get_queryset().filter()
             query = self.get_query()
             queryset = queryset.filter(query)
             return queryset
@@ -48,21 +59,41 @@ class CustomerSearchView(ListView):
             return self.search_form.cleaned_data['id']
 
 
-class CustomerListView(ListView):
+class CustomerListView(PermissionAccessMixin, ListView):
     model = get_user_model()
     template_name = 'customers/customers_list.html'
 
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-class MerchantIndexView(TemplateView):
+    # def get_queryset(self):
+    #     self.queryset = super().get_queryset().filter(
+    #                             Order.objects.filter(
+    #                             program=Program.objects.filter(
+    #                             branch=Branch.objects.filter(
+    #                             merchant=Merchant.objects.filter()))))
+    #     return self.queryset
+
+
+class MerchantIndexView(PermissionAccessMixin, TemplateView):
     template_name = 'index.html'
 
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-class ProgramListView(ListView):
+
+class ProgramListView(PermissionAccessMixin, ListView):
     model = Program
     template_name = 'program.html'
 
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-class ProgramCreateView(CreateView):
+    def get_queryset(self):
+        return super().get_queryset().filter()
+
+
+class ProgramCreateView(PermissionAccessMixin, CreateView):
     model = Program
     template_name = 'program_create.html'
     form_class = ProgramForm
@@ -71,7 +102,7 @@ class ProgramCreateView(CreateView):
         return reverse_lazy('merchantapp:programs')
 
 
-class ProgramUpdateView(UpdateView):
+class ProgramUpdateView(PermissionAccessMixin, UpdateView):
     model = Program
     template_name = 'program_update.html'
     form_class = ProgramForm
@@ -80,12 +111,18 @@ class ProgramUpdateView(UpdateView):
         return reverse_lazy('merchantapp:programs')
 
 
-class BranchListView(ListView):
+class BranchListView(PermissionAccessMixin, ListView):
     model = Branch
     template_name = 'branches/branch_list.html'
 
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-class BranchCreateView(CreateView):
+    def get_queryset(self):
+        return super().get_queryset().filter()
+
+
+class BranchCreateView(PermissionAccessMixin, CreateView):
     model = Branch
     template_name = 'branches/branch_create.html'
     form_class = BranchForm
@@ -128,7 +165,7 @@ class BranchCreateView(CreateView):
         return reverse_lazy('merchantapp:branches')
 
 
-class BranchUpdateView(UpdateView):
+class BranchUpdateView(PermissionAccessMixin, UpdateView):
     model = Branch
     template_name = 'branches/branch_update.html'
     form_class = BranchForm
@@ -171,12 +208,21 @@ class BranchUpdateView(UpdateView):
         return reverse_lazy('merchantapp:branches')
 
 
-class OrderProcessingView(ListView):
+class OrderProcessingView(PermissionAccessMixin, ListView):
     model = Order
     template_name = 'orders/order_list.html'
 
+    def test_func(self):
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-class OrderCreateView(CreateView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = get_user_model().objects.get(pk=self.kwargs.get('pk'))
+        queryset = queryset.filter(user=user)
+        return queryset
+
+
+class OrderCreateView(PermissionAccessMixin, CreateView):
     model = Order
     template_name = 'orders/order_create.html'
     fields = ['price', 'amount', 'program']
@@ -223,6 +269,18 @@ def redeem_user_reward(request, **kwargs):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
+def access_required(function):
+    def wrapper(request, *args, **kwargs):
+        user = request.user
+        if not user.is_superuser or user.groups.filter('staff') or user.groups.filter('merchant-manager'):
+            return HttpResponseForbidden()
+        else:
+            return function(request, *args, **kwargs)
+
+    return wrapper
+
+
+@access_required
 def download_customers_file(request, **kwargs):
     file_name = 'customers.csv'
     lines = ['Номер телефона, Всего заказов, Всего наград']
@@ -236,8 +294,9 @@ def download_customers_file(request, **kwargs):
 
 
 def send_notification_to_bot(user_id, message):
-    user = get_object_or_404(get_user_model(), id=user_id)
-    url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
-    params = {'chat_id': user.tg_id,
-              'text': message}
-    r = requests.get(url, params)
+    # user = get_object_or_404(get_user_model(), id=user_id)
+    # url = f'https://api.telegram.org/{tg_bot_token}/sendMessage'
+    # params = {'chat_id': user.tg_id,
+    #           'text': message}
+    # r = requests.get(url, params)
+    pass

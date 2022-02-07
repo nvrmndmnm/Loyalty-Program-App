@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
-    <h1>Программы</h1>
-    <a href="{% url 'merchantapp:program_create' %}">Добавить программу</a>
+    <h1>{% trans "Programs" %}</h1>
+    <a href="{% url 'merchantapp:program_create' %}">{% blocktrans %}Add program{% endblocktrans %}</a>
     <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 10%">Название</th>
-            <th scope="col" style="width: 10%">Условие</th>
-            <th scope="col" style="width: 10%">Награда</th>
-            <th scope="col" style="width: 20%">Описание</th>
-            <th scope="col" style="width: 5%">Действия</th>
+            <th scope="col" style="width: 10%">{% trans "Title" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Condition" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Reward" %}</th>
+            <th scope="col" style="width: 20%">{% trans "Description" %}</th>
+            <th scope="col" style="width: 5%">{% trans "Actions" %}</th>
         </tr>
         </thead>
         <tbody>
@@ -21,7 +22,7 @@
                 <td>{{ program.condition }}</td>
                 <td>{{ program.reward }}</td>
                 <td>{{ program.description }}</td>
-                <td><a href="{% url 'merchantapp:program_update' program.pk %}">Обновить</a></td>
+                    <td><a href="{% url 'merchantapp:program_update' program.pk %}">{% trans "Refresh" %}</a></td>
             </tr>
         {% endfor %}
         </tbody>
