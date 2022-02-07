@@ -28,6 +28,7 @@
             <ul class="navbar-nav">
                 {% if  user.is_authenticated %}
                     <li class="nav-item">
+                    {% if request.user.is_superuser or request.user.groups == 'Stuff' or request.user.groups == 'Merch-man' or request.user.groups == 'Merch-emp' %}
                         <a class="nav-link" href="{% url 'merchantapp:programs' %}">{% trans "ProgramsLink" %}</a>
                     </li>
                     <li class="nav-item">
@@ -36,6 +37,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'merchantapp:customers' %}">{% trans "Clients" %}</a>
                     </li>
+                        {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'accounts:logout' %}">{% trans "Logout" %}</a>
                     </li>

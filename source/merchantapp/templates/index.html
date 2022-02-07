@@ -4,8 +4,10 @@
 {% block content %}
     <form method="get" action={% url 'merchantapp:user_search' %}>
         <div class="input-group">
+             {% if request.user.is_superuser or request.user.groups == 'Stuff' or request.user.groups == 'Merch-man' or request.user.groups == 'Merch-emp' %}
             <input class="form-control border" type="search" name="id" placeholder="Search">
             <button class="btn btn-secondary" type="submit">{% trans "Search" %}</button>
+            {% endif %}
         </div>
     </form>
     {% if customuser_list %}
