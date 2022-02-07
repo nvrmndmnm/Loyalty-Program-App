@@ -17,8 +17,8 @@ from merchantapp.models import Program, Branch, Order, UserReward, Merchant
 
 class PermissionAccessMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.groups.filter(name="Merch-man") or \
-               self.request.user.groups.filter(name="Stuff")
+        return self.request.user.is_superuser or self.request.user.groups.filter(name="merchant-manager") or \
+               self.request.user.groups.filter(name="staff")
 
 
 class CustomerSearchView(PermissionAccessMixin, ListView):
@@ -26,7 +26,7 @@ class CustomerSearchView(PermissionAccessMixin, ListView):
     template_name = 'index.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get(self, request, *args, **kwargs):
         self.search_form = self.get_search_form()
@@ -43,7 +43,6 @@ class CustomerSearchView(PermissionAccessMixin, ListView):
     def get_queryset(self):
         if self.search_value:
             queryset = super().get_queryset().filter()
-            print('--------------------------------------------------', queryset)
             query = self.get_query()
             queryset = queryset.filter(query)
             return queryset
@@ -65,7 +64,7 @@ class CustomerListView(PermissionAccessMixin, ListView):
     template_name = 'customers/customers_list.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     # def get_queryset(self):
     #     self.queryset = super().get_queryset().filter(
@@ -80,7 +79,7 @@ class MerchantIndexView(PermissionAccessMixin, TemplateView):
     template_name = 'index.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
 
 class ProgramListView(PermissionAccessMixin, ListView):
@@ -88,7 +87,7 @@ class ProgramListView(PermissionAccessMixin, ListView):
     template_name = 'program.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
         return super().get_queryset().filter()
@@ -117,7 +116,7 @@ class BranchListView(PermissionAccessMixin, ListView):
     template_name = 'branches/branch_list.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
         return super().get_queryset().filter()
@@ -214,7 +213,7 @@ class OrderProcessingView(PermissionAccessMixin, ListView):
     template_name = 'orders/order_list.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="Merch-emp")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
         return super().get_queryset().filter()
@@ -270,7 +269,7 @@ def redeem_user_reward(request, **kwargs):
 def access_required(function):
     def wrapper(request, *args, **kwargs):
         user = request.user
-        if not user.is_superuser or user.groups.filter('Stuff') or user.groups.filter('Merch-man'):
+        if not user.is_superuser or user.groups.filter('staff') or user.groups.filter('merchant-manager'):
             return HttpResponseForbidden()
         else:
             return function(request, *args, **kwargs)

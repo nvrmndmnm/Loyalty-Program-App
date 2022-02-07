@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Активные клиенты</h1>
+    {% if request.user.is_superuser or request.user.groups == 'staff' or request.user.groups == 'merchant-manager' %}
     <a href="{% url 'merchantapp:customers_download' %}">Выгрузить в CSV</a>
+    {% endif %}
     <table class="table table-hover">
+
         <thead>
         <tr>
             <th scope="col" style="width: 5%">#</th>
