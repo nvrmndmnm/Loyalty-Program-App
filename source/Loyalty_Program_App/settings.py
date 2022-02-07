@@ -131,7 +131,6 @@ import django.conf.locale
 
 django.conf.locale.LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 
-
 LANGUAGE_CODE = 'ru'
 
 LANGUAGES = [
@@ -159,6 +158,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = '/uploads/'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 

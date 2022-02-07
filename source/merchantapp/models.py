@@ -93,7 +93,7 @@ class ProgramCondition(BaseModel):
     condition_type = models.ForeignKey('ProgramConditionType', on_delete=models.CASCADE,
                                        related_name='type', verbose_name=_('ConditionType'))
     amount = models.PositiveIntegerField(default=0, verbose_name=_('Amount'))
-
+    
     def __str__(self):
         return f"{str(self.condition_type)} x {self.amount}"
 
