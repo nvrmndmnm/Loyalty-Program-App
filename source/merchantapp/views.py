@@ -174,6 +174,12 @@ class OrderProcessingView(ListView):
     model = Order
     template_name = 'orders/order_list.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = get_user_model().objects.get(pk=self.kwargs.get('pk'))
+        queryset = queryset.filter(user=user)
+        return queryset
+
 
 class OrderCreateView(CreateView):
     model = Order
