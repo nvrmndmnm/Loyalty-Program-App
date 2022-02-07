@@ -16,8 +16,8 @@
         {% for customer in customuser_list.all %}
             <tr>
                 <th scope="row">{{ customer.id }}</th>
-                <td>{{ customer.phone }}</td>
-                <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                <td><a class="text-decoration-none" href="{% url 'merchantapp:orders' user.pk %}">{{ customer.phone }}</a></td>
+                <td><a class="text-decoration-none" href="{% url 'merchantapp:orders' user.pk %}">{{ customer.first_name }} {{ customer.last_name }}</a></td>
                 <td>{{ customer.order_user.count }}</td>
                 <td>{{ customer.user_reward.count }}</td>
             </tr>
