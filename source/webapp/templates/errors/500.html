@@ -1,0 +1,11 @@
+{% extends 'base_http_errors.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center my-5">
+            <p class="fs-1 my-5">Ошибка 500</p>
+            <p class="fs-4">Код состояния 500 указывает на то, что сервер столкнулся с чем-то, чего не ожидал, и не смог выполнить запрос.</p>
+            <p class="fs-4">Попробуйте перейти на <a href="{% url 'merchantapp:merchant_index' %}" class="text-decoration-none">Главную</a> страницу</p>
+        </div>
+    </div>
+{% endblock %}

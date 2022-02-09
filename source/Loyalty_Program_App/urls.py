@@ -16,3 +16,9 @@ urlpatterns += i18n_patterns(
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler401 = "webapp.views.error_401"
+handler403 = "webapp.views.error_403"
+handler404 = "webapp.views.error_404"
+handler500 = "webapp.views.error_500"
+

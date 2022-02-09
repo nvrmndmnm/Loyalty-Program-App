@@ -1,0 +1,11 @@
+{% extends 'base_http_errors.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center my-5">
+            <p class="fs-1 my-5">Ошибка 403</p>
+            <p class="fs-4">Код состояния 403 указывает, что клиент не может получить доступ к запрошенному ресурсу. Это может означать, что в запросе были отправлены неправильные имя пользователя и пароль, или что разрешения на сервере не разрешают запрашиваемое.</p>
+            <p class="fs-4">Попробуйте перейти на <a href="{% url 'merchantapp:merchant_index' %}" class="text-decoration-none">Главную</a> страницу</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base_http_errors.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center my-5">
+            <p class="fs-1 my-5">Ошибка 401</p>
+            <p class="fs-4">Код состояния 401 указывает, что перед доступом к ресурсу клиент должен быть авторизован сервером.</p>
+            <p class="fs-4">Попробуйте перейти на <a href="{% url 'merchantapp:merchant_index' %}" class="text-decoration-none">Главную</a> страницу</p>
+        </div>
+    </div>
+{% endblock %}
