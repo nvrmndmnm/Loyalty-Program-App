@@ -27,6 +27,7 @@ class Merchant(BaseModel):
     name = models.CharField(max_length=150, verbose_name=_('Title'))
     director = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                                  related_name='merchant_director', verbose_name=_('Supervisor'))
+    employees = models.ManyToManyField(get_user_model(), related_name='employees', verbose_name=_('Employees'))
     category = models.CharField(choices=merchant_categories, max_length=20, verbose_name=_('Category'))
 
     def __str__(self):
@@ -36,7 +37,8 @@ class Merchant(BaseModel):
 class Branch(BaseModel):
     code = models.CharField(max_length=150, unique=True, verbose_name=_('Identifier'))
     name = models.CharField(max_length=150, verbose_name=_('Title'))
-    merchant = models.ForeignKey('Merchant', on_delete=models.CASCADE, related_name='merchant', verbose_name=_('Partner'))
+    merchant = models.ForeignKey('Merchant', on_delete=models.CASCADE, related_name='merchant',
+                                 verbose_name=_('Partner'))
     address = models.ForeignKey('Address', on_delete=models.CASCADE, related_name='address', verbose_name='Адрес')
     description = models.TextField(max_length=1000, blank=True, null=True, verbose_name=_('Description'))
 
@@ -62,7 +64,8 @@ class Program(BaseModel):
     title = models.CharField(max_length=150, verbose_name=_('Title'))
     condition = models.ForeignKey('ProgramCondition', on_delete=models.CASCADE,
                                   related_name='condition', verbose_name=_('Condition'))
-    reward = models.ForeignKey('ProgramReward', on_delete=models.CASCADE, related_name='reward', verbose_name=_('Reward'))
+    reward = models.ForeignKey('ProgramReward', on_delete=models.CASCADE,
+                               related_name='reward', verbose_name=_('Reward'))
     branch = models.ManyToManyField('Branch', related_name='branch', verbose_name=_('Branch'))
     start_date = models.DateTimeField(blank=True, null=True, verbose_name=_('StartDate'))
     end_date = models.DateTimeField(blank=True, null=True, verbose_name=_('EndDate'))

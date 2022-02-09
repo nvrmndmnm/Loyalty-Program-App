@@ -9,8 +9,6 @@ from buttons import get_register_keyboard, get_base_reply_keyboard
 from pathlib import Path
 import qrcode
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,8 +58,8 @@ def news(update: Update, context: CallbackContext):
 def rewards(update: Update, context: CallbackContext):
     response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
-    if not str(response.status_code).startswith('2'):
-        user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
+    # if not str(response.status_code).startswith('2'):
+    #     user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
     if response.get('program'):
         for i in range(int(response['program'])):
             if i < int(response['completed_orders']):
