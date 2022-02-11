@@ -20,6 +20,11 @@ class BranchReadSerializer(serializers.ModelSerializer):
         model = Branch
         fields = ["name", "address", "description"]
 
+    def to_representation(self, instance):
+        rep = super(BranchReadSerializer, self).to_representation(instance)
+        rep['address'] = instance.address.link2gis
+        return rep
+
 
 class ArticleWriteSerializer(serializers.ModelSerializer):
     class Meta:
