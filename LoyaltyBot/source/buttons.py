@@ -6,7 +6,7 @@ BUTTON2_NEWS = 'Новости'
 BUTTON3_AWARDS = 'Мои награды'
 BUTTON4_SETTINGS = 'Настройки'
 BUTTON5_QR = 'QR код'
-BUTTON6_REGISTER = 'Авторизация'
+BUTTON6_REGISTER = 'Авторизацияяяя'
 
 
 def get_register_keyboard():
