@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Loyalty_Program_App.urls'
+ROOT_URLCONF = os.getenv('APP_ROOT_URLCONF')
 
 TEMPLATES = [
     {

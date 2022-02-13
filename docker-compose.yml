@@ -25,6 +25,46 @@ services:
       - db
     env_file:
       - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls
+
+  cp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate &&
+      gunicorn --bind 0.0.0.0:8001 Loyalty_Program_App.wsgi -w 3"
+    volumes:
+      - ./source:/code
+      - static:/home/app/web/static
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_admin
+      - ALLOWED_HOSTS=cp.localhost cp.allcard.me
+
+  home:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate &&
+      gunicorn --bind 0.0.0.0:8002 Loyalty_Program_App.wsgi -w 3"
+    volumes:
+      - ./source:/code
+      - static:/home/app/web/static
+    ports:
+      - "8002:8002"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_home
+      - ALLOWED_HOSTS=localhost allcard.me
 
   bot:
     build:
