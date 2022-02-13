@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.utils.translation import gettext_lazy as _
 
@@ -60,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Loyalty_Program_App.urls'
+ROOT_URLCONF = os.getenv('APP_ROOT_URLCONF')
 
 TEMPLATES = [
     {
@@ -161,7 +159,6 @@ MEDIA_URL = '/uploads/'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

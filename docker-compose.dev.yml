@@ -30,5 +30,43 @@ services:
     env_file:
       - .env.dev
 
+  cp:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./source:/code
+    ports:
+      - "8001:8000"
+    links:
+      - db
+    depends_on:
+      - db
+      - web
+    env_file:
+      - .env.dev
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_admin
+      - ALLOWED_HOSTS=cp.localhost cp.allcard.me 127.0.0.1
+
+  home:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./source:/code
+    ports:
+      - "8002:8000"
+    links:
+      - db
+    depends_on:
+      - db
+      - web
+    env_file:
+      - .env.dev
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_home
+      - ALLOWED_HOSTS=localhost allcard.me 127.0.0.1
+
 volumes:
   postgres_data:
