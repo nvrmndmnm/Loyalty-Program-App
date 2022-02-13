@@ -22,7 +22,11 @@ class BranchReadSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(BranchReadSerializer, self).to_representation(instance)
-        rep['address'] = instance.address.link2gis
+        rep['address'] = ', '.join(filter(None, (instance.address.street,
+                                                 instance.address.building,
+                                                 instance.address.apartment,
+                                                 instance.address.link2gis
+                                                 )))
         return rep
 
 
