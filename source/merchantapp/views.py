@@ -218,7 +218,7 @@ class OrderProcessingView(PermissionAccessMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         user = get_user_model().objects.get(pk=self.kwargs.get('pk'))
-        queryset = queryset.filter(user=user)
+        queryset = queryset.filter(user=user).order_by('-time_created')
         return queryset
 
 

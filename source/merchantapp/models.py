@@ -48,8 +48,8 @@ class Branch(BaseModel):
 
 class Address(BaseModel):
     street = models.CharField(max_length=150, verbose_name=_('Street'))
-    building = models.CharField(max_length=20, verbose_name=_('Building'))
-    apartment = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Office'))
+    building = models.CharField(max_length=50, verbose_name=_('Building'))
+    apartment = models.CharField(max_length=50, blank=True, null=True, verbose_name=_('Office'))
     city = models.CharField(max_length=50, verbose_name=_('City'))
     link2gis = models.URLField(verbose_name=_('LinkTo2GIS'))
     latitude = models.DecimalField(max_digits=9, decimal_places=6, verbose_name=_('Latitude'))
