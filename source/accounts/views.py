@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 
 from accounts.forms import PasswordChangeForm, UserChangeForm
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from accounts.forms import UserAdminCreationForm
 
 

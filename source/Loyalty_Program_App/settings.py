@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'webapp',
     'merchantapp',
     'clientapi',
-    'accounts'
+    'accounts',
+    'behave_django'
 ]
 
 MIDDLEWARE = [
