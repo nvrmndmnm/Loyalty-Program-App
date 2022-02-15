@@ -9,7 +9,8 @@ from buttons import get_register_keyboard, get_base_reply_keyboard
 from pathlib import Path
 import qrcode
 import os
-
+import json
+import errors_messages
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TG_TOKEN = os.getenv('TG_TOKEN')
@@ -34,44 +35,63 @@ def help(update: Update, context: CallbackContext):
 # Обработка клавиатуры
 def branches(update: Update, context: CallbackContext):
     branches = ''
-    for i in loyaltyAPI.get_request('branches'):
-        branches += f'Название {i["name"]}\n' \
-                    f'Aдрес: {i["address"]}\n' \
-                    f'{i["description"]}\n\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=branches, )
+    try:
+        response = loyaltyAPI.get_request('branches')
+        for i in response:
+            branches += f'Название {i["name"]}\n' \
+                        f'Aдрес: {i["address"]}\n' \
+                        f'{i["description"]}\n\n'
+        context.bot.send_message(chat_id=update.effective_chat.id, text=branches, )
+    except json.decoder.JSONDecodeError:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error_404, )
+    except Exception:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error, )
+
+    # except Exception as e:
+    #     error_type = type(e).__name__
+    #     oshibks = ("Неожиданная ошибка типа %s:" % error_type)
+    #     context.bot.send_message(chat_id=update.effective_chat.id, text=oshibks, )
 
 
 # Обработчик кнопки новостей
 def news(update: Update, context: CallbackContext):
-    response = loyaltyAPI.get_request('articles')
     news_reply_message = 'Новостей пока нет, возвращайтесь позже!'
-    if response:
-        articles = ''
-        for i in response:
-            articles += f'{i["time_created"][:10]}\n' \
-                        f'{i["title"]}\n' \
-                        f'{i["text"]}\n\n'
-            news_reply_message = articles
-    context.bot.send_message(chat_id=update.effective_chat.id, text=news_reply_message, )
+    try:
+        response = loyaltyAPI.get_request('articles')
+        if response:
+            articles = ''
+            for i in response:
+                articles += f'{i["time_created"][:10]}\n' \
+                            f'{i["title"]}\n' \
+                            f'{i["text"]}\n\n'
+                news_reply_message = articles
+        context.bot.send_message(chat_id=update.effective_chat.id, text=news_reply_message, )
+    except json.decoder.JSONDecodeError:
+        context.bot.send_message(chat_id=update.effective_chat.id,text=errors_messages.error_404, )
+    except Exception:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error, )
 
 
 def rewards(update: Update, context: CallbackContext):
-    response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
     user_rewards_reply = ""
-    # if not str(response.status_code).startswith('2'):
-    #     user_rewards_reply = 'Произошла ошибка. Попробуйте отправить запрос снова.'
-    if response.get('program'):
-        for i in range(int(response['program'])):
-            if i < int(response['completed_orders']):
-                user_rewards_reply += '❤️‍🔥 '
-            else:
-                user_rewards_reply += "🤍 "
-        user_rewards_reply += f"\n\nНеобходимо заказов для получения награды: " \
-                              f"{int(response['program']) - int(response['completed_orders'])}.\n\n" \
-                              f"Доступно наград: {response['active_rewards']}."
-    else:
-        user_rewards_reply = 'У вас пока нет завершённых заказов.'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=user_rewards_reply, )
+    try:
+        response = loyaltyAPI.get_request(f'users/{update.effective_user.id}/progress')
+        if response.get('program'):
+            for i in range(int(response['program'])):
+                if i < int(response['completed_orders']):
+                    user_rewards_reply += '❤️‍🔥 '
+                else:
+                    user_rewards_reply += "🤍 "
+            user_rewards_reply += f"\n\nНеобходимо заказов для получения награды: " \
+                                  f"{int(response['program']) - int(response['completed_orders'])}.\n\n" \
+                                  f"Доступно наград: {response['active_rewards']}."
+        else:
+            user_rewards_reply = 'У вас пока нет завершённых заказов.'
+        context.bot.send_message(chat_id=update.effective_chat.id, text=user_rewards_reply, )
+    except json.decoder.JSONDecodeError:
+        context.bot.send_message(chat_id=update.effective_chat.id,text=errors_messages.error_404, )
+    except Exception:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error, )
 
 
 def register(update: Update, context: CallbackContext):
