@@ -16,3 +16,8 @@ urlpatterns += i18n_patterns(
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler401 = "merchantapp.views.error_401"
+handler403 = "merchantapp.views.error_403"
+handler404 = "merchantapp.views.error_404"
+handler500 = "merchantapp.views.error_500"

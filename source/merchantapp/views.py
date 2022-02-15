@@ -1,7 +1,7 @@
 import datetime
 import os
 
-import requests
+# import requests
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -330,3 +330,19 @@ def password_reset_request(request):
         else:
             context['error'] = 'Такого пользователя не существует.'
     return render(request, "password/password_reset.html", context)
+
+
+def error_401(request, exception):
+    return render(request, 'custom_errors/401.html')
+
+
+def error_403(request, exception):
+    return render(request, 'custom_errors/403.html')
+
+
+def error_404(request, exception):
+    return render(request, 'custom_errors/404.html')
+
+
+def error_500(request):
+    return render(request, 'custom_errors/500.html')

@@ -1,0 +1,11 @@
+{% extends 'base_http_errors.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center my-5">
+            <p class="fs-1 my-5">Ошибка 4<i class="far fa-question-circle fa-spin"></i>4</p>
+            <p class="fs-4">Код состояния 404 указывает на то, что запрошенный ресурс не был найден по указанному URL-адресу</p>
+            <p class="fs-4">Попробуйте перейти на <a href="{% url 'merchantapp:merchant_index' %}" class="text-decoration-none">Главную</a> страницу</p>
+        </div>
+    </div>
+{% endblock %}
