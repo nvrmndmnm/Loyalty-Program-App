@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Активные клиенты</h1>
-    <a href="{% url 'merchantapp:customers_download' %}">Выгрузить в CSV</a>
+    <h1>Работники заведения</h1>
+    <a href="#">Отправить приглашение</a>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -13,13 +13,13 @@
         </tr>
         </thead>
         <tbody>
-        {% for customer in customuser_list.all %}
+        {% for employee in employees_list.all %}
             <tr>
-                <th scope="row">{{ customer.id }}</th>
-                <td>{{ customer.phone }}</td>
-                <td>{{ customer.first_name }} {{ customer.last_name }}</td>
-                <td>{{ customer.order_user.count }}</td>
-                <td>{{ customer.user_reward.count }}</td>
+                <th scope="row">{{ employee.id }}</th>
+                <td><a href="{% url 'merchantapp:employee_details' employee.pk %}">{{ employee.phone }}</a></td>
+                <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                <td>{{ employee.order_user.count }}</td>
+                <td>{{ employee.user_reward.count }}</td>
             </tr>
         {% endfor %}
         </tbody>

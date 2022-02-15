@@ -27,6 +27,7 @@ class Merchant(BaseModel):
     name = models.CharField(max_length=150, verbose_name=_('Title'))
     director = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                                  related_name='merchant_director', verbose_name=_('Supervisor'))
+    employees = models.ManyToManyField(get_user_model(), related_name='merchants', verbose_name=_('Employees'))
     category = models.CharField(choices=merchant_categories, max_length=20, verbose_name=_('Category'))
 
     def __str__(self):
