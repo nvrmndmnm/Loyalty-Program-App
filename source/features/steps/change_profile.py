@@ -5,7 +5,7 @@
 #
 # @given("Я захожу на страницу входа")
 # def step_impl(context):
-#     admin = UserFactory(phone="77777777777", is_superuser=True)
+#     admin = UserFactory(phone="7771112233", is_superuser=True)
 #     admin.set_password("TestPassword123")
 #     admin.save()
 #     context.browser.get(f"{context.base_url}/accounts/login/")
