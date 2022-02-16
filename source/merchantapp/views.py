@@ -12,7 +12,7 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.http import urlencode, urlsafe_base64_encode
-from django.views.generic import ListView, TemplateView, CreateView, UpdateView
+from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from accounts.forms import PasswordRequestForm
@@ -86,37 +86,18 @@ class EmployeeListView(PermissionAccessMixin, ListView):
     context_object_name = 'employees_list'
 
     def get_queryset(self):
-        manager = self.request.user
-        merchant = Merchant.objects.filter(employees__phone=manager.phone).last()
+        qs = Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)
+        merchant = Merchant.objects.filter(qs).first()
         if merchant:
             self.queryset = merchant.employees.all()
             return self.queryset
-        else:
-            return self.queryset
+        return self.queryset
 
 
 class EmployeeDetailsView(PermissionAccessMixin, DetailView):
     model = get_user_model()
     template_name = "employees/employee_detail.html"
     context_object_name = "employee_object"
-
-
-class EmployeeDeleteView(PermissionAccessMixin, DeleteView):
-    model = get_user_model()
-    template_name = "employees/employee_detail.html"
-    context_object_name = "employee_object"
-    success_url = reverse_lazy('merchantapp:employees_list')
-
-    def get_object(self):
-        pk = self.kwargs.get("pk")
-        return get_user_model().objects.get(pk=pk)
-
-    def delete(self, request, *args, **kwargs):
-        employee = self.get_object()
-        employee.groups.clear()
-        merchant = Merchant.objects.filter(employees=employee).last()
-        merchant.employees.remove(employee)
-        return HttpResponseRedirect(self.success_url)
 
 
 class MerchantIndexView(PermissionAccessMixin, TemplateView):
@@ -361,17 +342,29 @@ def add_merchant_employee(request):
                 merchant.save()
                 group = Group.objects.get(name='merchant-manager')
                 user.groups.add(group)
+                if not user.password:
+                    domain = f'{os.getenv("CABINET_SITE")}accounts/reset'
+                    uid = urlsafe_base64_encode(force_bytes(user.pk))
+                    token = default_token_generator.make_token(user)
+                    message = f'{domain}/{uid}/{token}/'
 
-                domain = f'{os.getenv("CABINET_SITE")}accounts/reset'
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                token = default_token_generator.make_token(user)
-                message = f'{domain}/{uid}/{token}/'
-
-                try:
-                    send_notification_to_bot(user.id, message)
-                except Exception as e:
-                    return HttpResponse('Произошла ошибка: ' + str(e))
-                return redirect("accounts:password_reset_done")
+                    try:
+                        send_notification_to_bot(user.id, message)
+                    except Exception as e:
+                        return HttpResponse('Произошла ошибка: ' + str(e))
+                    return redirect("accounts:password_reset_done")
+                return redirect('merchantapp:employees_list')
         else:
             context['error'] = 'Такого пользователя не существует.'
-    return render(request, 'password/password_reset.html', context)
+    return render(request, 'employees/employee_add.html', context)
+
+
+def remove_merchant_employee(request, pk):
+    employee = get_object_or_404(get_user_model(), pk=pk)
+    qs = Q(director=request.user.pk) | Q(employees=request.user.pk)
+    merchant = Merchant.objects.filter(qs).first()
+    if employee:
+        merchant.employees.remove(employee)
+        group = Group.objects.get(name='merchant-manager')
+        employee.groups.remove(group)
+    return redirect('merchantapp:employees_list')
