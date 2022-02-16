@@ -8,8 +8,7 @@
             <th scope="col" style="width: 5%">#</th>
             <th scope="col" style="width: 10%">Номер телефона</th>
             <th scope="col" style="width: 10%">Имя</th>
-            <th scope="col" style="width: 10%">Всего заказов</th>
-            <th scope="col" style="width: 20%">Получено наград</th>
+            <th scope="col" style="width: 10%">#</th>
         </tr>
         </thead>
         <tbody>
@@ -18,8 +17,7 @@
                 <th scope="row">{{ employee.id }}</th>
                 <td><a href="{% url 'merchantapp:employee_details' employee.pk %}">{{ employee.phone }}</a></td>
                 <td>{{ employee.first_name }} {{ employee.last_name }}</td>
-                <td>{{ employee.order_user.count }}</td>
-                <td>{{ employee.user_reward.count }}</td>
+                <td><a href="{% url 'merchantapp:employee_details' employee.pk %}">Редактировать</a></td>
             </tr>
         {% endfor %}
         </tbody>
