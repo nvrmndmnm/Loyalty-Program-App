@@ -80,6 +80,45 @@ class CustomerListView(PermissionAccessMixin, ListView):
     #     return self.queryset
 
 
+class EmployeeListView(PermissionAccessMixin, ListView):
+    model = get_user_model()
+    template_name = 'employees/employees_list.html'
+    context_object_name = 'employees_list'
+
+    def get_queryset(self):
+        manager = self.request.user
+        merchant = Merchant.objects.filter(employees__phone=manager.phone).last()
+        if merchant:
+            self.queryset = merchant.employees.all()
+            return self.queryset
+        else:
+            return self.queryset
+
+
+class EmployeeDetailsView(PermissionAccessMixin, DetailView):
+    model = get_user_model()
+    template_name = "employees/employee_detail.html"
+    context_object_name = "employee_object"
+
+
+class EmployeeDeleteView(PermissionAccessMixin, DeleteView):
+    model = get_user_model()
+    template_name = "employees/employee_detail.html"
+    context_object_name = "employee_object"
+    success_url = reverse_lazy('merchantapp:employees_list')
+
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return get_user_model().objects.get(pk=pk)
+
+    def delete(self, request, *args, **kwargs):
+        employee = self.get_object()
+        employee.groups.clear()
+        merchant = Merchant.objects.filter(employees=employee).last()
+        merchant.employees.remove(employee)
+        return HttpResponseRedirect(self.success_url)
+
+
 class MerchantIndexView(PermissionAccessMixin, TemplateView):
     template_name = 'index.html'
 

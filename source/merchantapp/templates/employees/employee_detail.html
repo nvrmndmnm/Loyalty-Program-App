@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block title %} {{ employee_object.username }}{% endblock %}
+
+{% block content %}
+
+    <div class="text-center">
+        <h1></h1>
+            {% include 'employees/employee_delete_form.html' %}
+        <hr>
+        <p><b>Phone number:  </b>{{ employee_object.phone }}</p>
+            {% if employee_object.first_name %}
+                <p><b>Name: </b>{{ employee_object.first_name }}</p>
+            {% endif %}
+    </div>
+
+{% endblock %}

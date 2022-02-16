@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Работники заведения</h1>
+    <a href="#">Отправить приглашение</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 5%">#</th>
+            <th scope="col" style="width: 10%">Номер телефона</th>
+            <th scope="col" style="width: 10%">Имя</th>
+            <th scope="col" style="width: 10%">#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees_list.all %}
+            <tr>
+                <th scope="row">{{ employee.id }}</th>
+                <td><a href="{% url 'merchantapp:employee_details' employee.pk %}">{{ employee.phone }}</a></td>
+                <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                <td><a href="{% url 'merchantapp:employee_details' employee.pk %}">Редактировать</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
