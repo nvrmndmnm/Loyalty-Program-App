@@ -3,7 +3,7 @@
 {% block content %}
 
     <h1>Регистрация</h1>
-    <form class="w-50 mt-4" action="{% url "accounts:register" %}" method="post" novalidate>
+    <form class="w-50 mt-4" action="#" method="post" novalidate>
         {% csrf_token %}
         {% include 'partial/form.html' with button_text='Регистрация' %}
     </form>

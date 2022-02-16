@@ -7,5 +7,4 @@
         {% csrf_token %}
         {% include 'partial/form.html' with button_text='Войти' %}
     </form>
-    <p><a href="{% url "accounts:register" %}">Регистрация</a></p>
 {% endblock %}
