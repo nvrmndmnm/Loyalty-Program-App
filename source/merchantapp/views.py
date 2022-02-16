@@ -2,6 +2,7 @@ import datetime
 import os
 
 import requests
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -16,7 +17,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from accounts.forms import PasswordRequestForm
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
-from merchantapp.models import Program, Branch, Order, UserReward
+from merchantapp.models import Program, Branch, Order, UserReward, Merchant
 
 
 class PermissionAccessMixin(UserPassesTestMixin):
@@ -297,7 +298,6 @@ def download_customers_file(request, **kwargs):
     return response
 
 
-@access_required
 def send_notification_to_bot(user_id, message):
     user = get_object_or_404(get_user_model(), id=user_id)
     url = f'https://api.telegram.org/bot{os.getenv("TG_TOKEN")}/sendMessage'
@@ -306,17 +306,23 @@ def send_notification_to_bot(user_id, message):
     requests.get(url, params)
 
 
-@access_required
-def password_reset_request(request):
+def add_merchant_employee(request):
     password_reset_form = PasswordRequestForm()
-    context = {"form": password_reset_form}
+    context = {'form': password_reset_form}
 
-    if request.method == "POST":
+    if request.method == 'POST':
         request_form = PasswordRequestForm(request.POST)
         if request_form.is_valid():
             phone = request_form.cleaned_data['phone']
             user = get_object_or_404(get_user_model(), phone=phone)
-            if user:
+            qs = Q(director=request.user.pk) | Q(employees=request.user.pk)
+            merchant = Merchant.objects.filter(qs).first()
+            if user and merchant:
+                merchant.employees.add(user)
+                merchant.save()
+                group = Group.objects.get(name='merchant-manager')
+                user.groups.add(group)
+
                 domain = f'{os.getenv("CABINET_SITE")}accounts/reset'
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = default_token_generator.make_token(user)
@@ -329,4 +335,4 @@ def password_reset_request(request):
                 return redirect("accounts:password_reset_done")
         else:
             context['error'] = 'Такого пользователя не существует.'
-    return render(request, "password/password_reset.html", context)
+    return render(request, 'password/password_reset.html', context)

@@ -17,5 +17,5 @@ urlpatterns = [
     path('orders/<int:pk>/', merchant_views.OrderProcessingView.as_view(), name='orders'),
     path('orders/create/', merchant_views.OrderCreateView.as_view(), name='order_create'),
     path('orders/<int:pk>/redeem/', merchant_views.redeem_user_reward, name='redeem_user_reward'),
-    path('password_reset/', merchant_views.password_reset_request, name='password_reset'),
+    path('add_employee/', merchant_views.add_merchant_employee, name='add_employee'),
 ]
