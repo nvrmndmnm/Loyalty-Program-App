@@ -31,7 +31,7 @@ class CustomerSearchView(PermissionAccessMixin, ListView):
     template_name = 'index.html'
 
     def test_func(self):
-        return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
+        return super().test_func() or self.request.user.groups.filter(name="merchant-manager")
 
     def get(self, request, *args, **kwargs):
         self.search_form = self.get_search_form()
@@ -71,13 +71,14 @@ class CustomerListView(PermissionAccessMixin, ListView):
     def test_func(self):
         return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
-    # def get_queryset(self):
-    #     self.queryset = super().get_queryset().filter(
-    #                             Order.objects.filter(
-    #                             program=Program.objects.filter(
-    #                             branch=Branch.objects.filter(
-    #                             merchant=Merchant.objects.filter()))))
-    #     return self.queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        branches = Branch.objects.filter(merchant=merchant)
+        programs = Program.objects.filter(branch__in=branches)
+        orders = Order.objects.filter(program__in=programs)
+        queryset = queryset.filter(order_user__in=orders).distinct().order_by('-date_joined')
+        return queryset
 
 
 class EmployeeListView(PermissionAccessMixin, ListView):
@@ -86,8 +87,7 @@ class EmployeeListView(PermissionAccessMixin, ListView):
     context_object_name = 'employees_list'
 
     def get_queryset(self):
-        qs = Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)
-        merchant = Merchant.objects.filter(qs).first()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
         if merchant:
             self.queryset = merchant.employees.all()
             return self.queryset
@@ -115,13 +115,21 @@ class ProgramListView(PermissionAccessMixin, ListView):
         return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
-        return super().get_queryset().filter()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        branch = Branch.objects.filter(merchant=merchant)
+        return super().get_queryset().filter(branch__in=branch).distinct()
 
 
 class ProgramCreateView(PermissionAccessMixin, CreateView):
     model = Program
     template_name = 'program_create.html'
     form_class = ProgramForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        form.fields['branch'].queryset = Branch.objects.filter(merchant=merchant)
+        return form
 
     def get_success_url(self):
         return reverse_lazy('merchantapp:programs')
@@ -131,6 +139,12 @@ class ProgramUpdateView(PermissionAccessMixin, UpdateView):
     model = Program
     template_name = 'program_update.html'
     form_class = ProgramForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        form.fields['branch'].queryset = Branch.objects.filter(merchant=merchant)
+        return form
 
     def get_success_url(self):
         return reverse_lazy('merchantapp:programs')
@@ -144,7 +158,8 @@ class BranchListView(PermissionAccessMixin, ListView):
         return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
     def get_queryset(self):
-        return super().get_queryset().filter()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        return super().get_queryset().filter(merchant=merchant)
 
 
 class BranchCreateView(PermissionAccessMixin, CreateView):
@@ -165,9 +180,11 @@ class BranchCreateView(PermissionAccessMixin, CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, **kwargs):
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
         branch = kwargs['form'].save(commit=False)
         address = kwargs['address_form'].save()
         branch.address = address
+        branch.merchant = merchant
         branch.save()
         return redirect(self.get_success_url())
 
@@ -208,9 +225,11 @@ class BranchUpdateView(PermissionAccessMixin, UpdateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, **kwargs):
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
         branch = kwargs['form'].save(commit=False)
         address = kwargs['address_form'].save()
         branch.address = address
+        branch.merchant = merchant
         branch.save()
         return redirect(self.get_success_url())
 
@@ -243,7 +262,10 @@ class OrderProcessingView(PermissionAccessMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         user = get_user_model().objects.get(pk=self.kwargs.get('pk'))
-        queryset = queryset.filter(user=user).order_by('-time_created')
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        branches = Branch.objects.filter(merchant=merchant)
+        programs = Program.objects.filter(branch__in=branches)
+        queryset = queryset.filter(program__in=programs).filter(user=user).order_by('-time_created')
         return queryset
 
 
@@ -252,6 +274,13 @@ class OrderCreateView(PermissionAccessMixin, CreateView):
     template_name = 'orders/order_create.html'
     fields = ['price', 'amount', 'program']
     success_url = ''
+
+    def get_form(self, form_class=None):
+        form = super().get_form()
+        merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
+        branch = Branch.objects.filter(merchant=merchant)
+        form.fields['program'].queryset = Program.objects.filter(branch__in=branch).distinct()
+        return form
 
     def form_valid(self, form):
         order = form.save(commit=False)

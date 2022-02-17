@@ -43,4 +43,4 @@ class AddressForm(forms.ModelForm):
 class BranchForm(forms.ModelForm):
     class Meta:
         model = Branch
-        fields = ['code', 'name', 'merchant', 'description', 'active']
+        fields = ['code', 'name', 'description', 'active']
