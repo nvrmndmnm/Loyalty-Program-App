@@ -71,6 +71,18 @@ class CustomerListView(PermissionAccessMixin, ListView):
     def test_func(self):
         return super().test_func() or self.request.user.groups.filter(name="merchant-employee")
 
+    def get(self, request, *args, **kwargs):
+        self.search_form = self.get_search_form()
+        self.search_value = self.get_search_value()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['search_form'] = self.search_form
+        if self.search_value:
+            context['query'] = urlencode({'id': self.search_value})
+        return context
+
     def get_queryset(self):
         queryset = super().get_queryset()
         merchant = Merchant.objects.filter(Q(director=self.request.user.pk) | Q(employees=self.request.user.pk)).first()
@@ -78,7 +90,21 @@ class CustomerListView(PermissionAccessMixin, ListView):
         programs = Program.objects.filter(branch__in=branches)
         orders = Order.objects.filter(program__in=programs)
         queryset = queryset.filter(order_user__in=orders).distinct().order_by('-date_joined')
+        if self.search_value:
+            query = self.get_query()
+            queryset = queryset.filter(query)
         return queryset
+
+    def get_query(self):
+        query = Q(phone__icontains=self.search_value)
+        return query
+
+    def get_search_form(self):
+        return UserSearchForm(self.request.GET)
+
+    def get_search_value(self):
+        if self.search_form.is_valid():
+            return self.search_form.cleaned_data['id']
 
 
 class EmployeeListView(PermissionAccessMixin, ListView):
