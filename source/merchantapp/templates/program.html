@@ -6,7 +6,6 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col" style="width: 5%">#</th>
             <th scope="col" style="width: 10%">{% trans "Title" %}</th>
             <th scope="col" style="width: 10%">{% trans "Condition" %}</th>
             <th scope="col" style="width: 10%">{% trans "Reward" %}</th>
@@ -17,8 +16,7 @@
         <tbody>
         {% for program in program_list.all %}
             <tr>
-                <th scope="row">{{ program.id }}</th>
-                <td>{{ program.title }}</td>
+                <th scope="row">{{ program.title }}</th>
                 <td>{{ program.condition }}</td>
                 <td>{{ program.reward }}</td>
                 <td>{{ program.description }}</td>

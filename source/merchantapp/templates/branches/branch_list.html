@@ -5,20 +5,20 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Название</th>
             <th scope="col">Адрес</th>
+            <th scope="col">Активна</th>
             <th scope="col">Действия</th>
         </tr>
         </thead>
         <tbody>
         {% for branch in branch_list.all %}
             <tr>
-                <th scope="row">{{ branch.id }}</th>
-                <td>{{ branch.name }}</td>
+                <th scope="row">{{ branch.name }}</th>
                 <td>{{ branch.address.street }},
                     {{ branch.address.building }}
                     {{ branch.address.apartment|default_if_none:'' }}</td>
+                <td>{{ branch.active|yesno:"да, нет" }}</td>
                 <td><a href="{% url 'merchantapp:branch_update' branch.pk %}">Обновить</a></td>
             </tr>
         {% endfor %}

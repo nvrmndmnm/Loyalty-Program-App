@@ -38,7 +38,7 @@ def branches(update: Update, context: CallbackContext):
     try:
         response = loyaltyAPI.get_request('branches')
         for i in response:
-            branches += f'Название {i["name"]}\n' \
+            branches += f'{i["name"]}\n' \
                         f'Aдрес: {i["address"]}\n' \
                         f'{i["description"]}\n\n'
         context.bot.send_message(chat_id=update.effective_chat.id, text=branches, )
@@ -46,11 +46,6 @@ def branches(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error_404, )
     except Exception:
         context.bot.send_message(chat_id=update.effective_chat.id, text=errors_messages.error, )
-
-    # except Exception as e:
-    #     error_type = type(e).__name__
-    #     oshibks = ("Неожиданная ошибка типа %s:" % error_type)
-    #     context.bot.send_message(chat_id=update.effective_chat.id, text=oshibks, )
 
 
 # Обработчик кнопки новостей
@@ -99,7 +94,7 @@ def register(update: Update, context: CallbackContext):
         data = {'phone': update.message.contact.phone_number.replace('+', ''),
                 'tg_id': update.message.contact.user_id,
                 'first_name': update.message.contact.first_name,
-                'last_name': update.message.contact.last_name}
+                'last_name': update.message.contact.last_name,}
         response = loyaltyAPI.post_request("users/create", **data)
         qr_result = generate_qr(update, update.message.contact)
         if not qr_result:

@@ -13,7 +13,6 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col" style="width: 5%">#</th>
             <th scope="col" style="width: 10%">Номер телефона</th>
             <th scope="col" style="width: 20%">Имя</th>
             <th scope="col" style="width: 10%">Всего заказов</th>
@@ -24,8 +23,7 @@
         <tbody>
         {% for customer in customuser_list.all %}
             <tr>
-                <th scope="row">{{ customer.id }}</th>
-                <td><a class="text-decoration-none" href="{% url 'merchantapp:orders' customer.id %}">{{ customer.phone }}</a></td>
+                <th scope="row"><a class="text-decoration-none" href="{% url 'merchantapp:orders' customer.id %}">{{ customer.phone }}</a></th>
                 <td><a class="text-decoration-none" href="{% url 'merchantapp:orders' customer.id %}">{{ customer.first_name }} {{ customer.last_name }}</a></td>
                 <td>{{ customer.order_user.count }}</td>
                 <td>{{ customer.user_reward.count }}</td>

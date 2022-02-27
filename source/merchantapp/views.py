@@ -175,6 +175,12 @@ class ProgramUpdateView(PermissionAccessMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('merchantapp:programs')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['condition'] = self.object.condition.amount
+        initial['reward'] = self.object.reward.amount
+        return initial
+
 
 class BranchListView(PermissionAccessMixin, ListView):
     model = Branch
@@ -363,10 +369,10 @@ def access_required(function):
 @access_required
 def download_customers_file(request, **kwargs):
     file_name = 'customers.csv'
-    lines = ['Номер телефона, Всего заказов, Всего наград']
+    lines = ['Номер телефона, Имя, Всего заказов, Всего наград, Дата регистрации']
     data = get_user_model().objects.all()
     for d in data:
-        lines.append(f'{d.phone}, {d.order_user.count()}, {d.user_reward.count()}')
+        lines.append(f'{d.phone}, {d.name}, {d.order_user.count()}, {d.user_reward.count()}, {d.date_joined}')
     response_content = '\n'.join(lines)
     response = HttpResponse(response_content, content_type="text/plain,charset=utf8")
     response['Content-Disposition'] = 'attachment; filename={0}'.format(file_name)

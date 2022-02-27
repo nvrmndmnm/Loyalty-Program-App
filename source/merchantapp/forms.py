@@ -1,5 +1,4 @@
 from django import forms
-
 from merchantapp.models import Program, ProgramCondition, ProgramConditionType, ProgramReward, ProgramRewardType,\
     Branch, Address
 
