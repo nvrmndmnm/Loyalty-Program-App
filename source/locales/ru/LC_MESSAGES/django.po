@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-17 20:35+0600\n"
+"POT-Creation-Date: 2022-03-01 19:21+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
-#: Loyalty_Program_App/settings.py:137
+
+#: Loyalty_Program_App/settings.py:99
 msgid "Russian"
 msgstr "Русский"
 
-#: Loyalty_Program_App/settings.py:138
+#: Loyalty_Program_App/settings.py:100
 msgid "Kazakh"
 msgstr "Казахский"
 
@@ -52,6 +53,8 @@ msgid "DateOfBirth"
 msgstr "Дата рождения"
 
 #: accounts/models.py:41 accounts/templates/user_detail.html:16
+#: merchantapp/templates/customers/customers_list.html:18
+#: merchantapp/templates/employees/employees_list.html:10
 msgid "Name"
 msgstr "Имя"
 
@@ -83,8 +86,8 @@ msgstr "Редактировать профиль"
 msgid "EditButton"
 msgstr "Редактировать"
 
-#: accounts/templates/user_detail.html:4 merchantapp/models.py:111
-#: merchantapp/models.py:125
+#: accounts/templates/user_detail.html:4 merchantapp/models.py:114
+#: merchantapp/models.py:128
 msgid "User"
 msgstr "Пользователь"
 
@@ -128,18 +131,19 @@ msgstr "Время создания"
 msgid "TimeUpdated"
 msgstr "Время обновления"
 
-#: merchantapp/models.py:19
+#: merchantapp/models.py:19 merchantapp/templates/branches/branch_list.html:11
 msgid "Active"
 msgstr "Активировать"
 
-#: merchantapp/models.py:26 merchantapp/models.py:37 merchantapp/models.py:61
-#: merchantapp/models.py:85 merchantapp/models.py:102
+#: merchantapp/models.py:26 merchantapp/models.py:38 merchantapp/models.py:63
+#: merchantapp/models.py:88 merchantapp/models.py:105
 msgid "Identifier"
 msgstr "Идентификатор"
 
-#: merchantapp/models.py:27 merchantapp/models.py:38 merchantapp/models.py:62
-#: merchantapp/models.py:86 merchantapp/models.py:103
-#: merchantapp/templates/program.html:10
+#: merchantapp/models.py:27 merchantapp/models.py:39 merchantapp/models.py:64
+#: merchantapp/models.py:89 merchantapp/models.py:106
+#: merchantapp/templates/branches/branch_list.html:9
+#: merchantapp/templates/program.html:9
 msgid "Title"
 msgstr "Название"
 
@@ -148,137 +152,206 @@ msgid "Supervisor"
 msgstr "Руководитель"
 
 #: merchantapp/models.py:30
+msgid "Employees"
+msgstr ""
+
+#: merchantapp/models.py:31
 msgid "Category"
 msgstr "Категория"
 
-#: merchantapp/models.py:39
+#: merchantapp/models.py:41
 msgid "Partner"
 msgstr "Партнёр"
 
-#: merchantapp/models.py:41 merchantapp/models.py:69
-#: merchantapp/templates/program.html:13
+#: merchantapp/models.py:43 merchantapp/models.py:72
+#: merchantapp/templates/program.html:12
 msgid "Description"
 msgstr "Описание"
 
-#: merchantapp/models.py:48
+#: merchantapp/models.py:50
 msgid "Street"
 msgstr "Улица"
 
-#: merchantapp/models.py:49
+#: merchantapp/models.py:51
 msgid "Building"
 msgstr "Здание"
 
-#: merchantapp/models.py:50
+#: merchantapp/models.py:52
 msgid "Office"
 msgstr "Офис"
 
-#: merchantapp/models.py:51
+#: merchantapp/models.py:53
 msgid "City"
 msgstr "Город"
 
-#: merchantapp/models.py:52
+#: merchantapp/models.py:54
 msgid "LinkTo2GIS"
 msgstr "Ссылка на 2GIS"
 
-#: merchantapp/models.py:53
+#: merchantapp/models.py:55
 msgid "Latitude"
 msgstr "Широта"
 
-#: merchantapp/models.py:54
+#: merchantapp/models.py:56
 msgid "Longitude"
 msgstr "Долгота"
 
-#: merchantapp/models.py:64 merchantapp/templates/program.html:11
+#: merchantapp/models.py:66 merchantapp/templates/program.html:10
 msgid "Condition"
 msgstr "Условие"
 
-#: merchantapp/models.py:65 merchantapp/templates/program.html:12
+#: merchantapp/models.py:68 merchantapp/templates/program.html:11
 msgid "Reward"
 msgstr "Награда"
 
-#: merchantapp/models.py:66
+#: merchantapp/models.py:69
 msgid "Branch"
 msgstr "Заведение"
 
-#: merchantapp/models.py:67
+#: merchantapp/models.py:70
 msgid "StartDate"
 msgstr "Дата начала"
 
-#: merchantapp/models.py:68 merchantapp/models.py:113
+#: merchantapp/models.py:71 merchantapp/models.py:116
 msgid "EndDate"
 msgstr "Дата завершения"
 
-#: merchantapp/models.py:77
+#: merchantapp/models.py:80
 msgid "RewardType"
 msgstr "Тип награды"
 
-#: merchantapp/models.py:78 merchantapp/models.py:95 merchantapp/models.py:114
+#: merchantapp/models.py:81 merchantapp/models.py:98 merchantapp/models.py:117
 msgid "Amount"
 msgstr "Количество"
 
-#: merchantapp/models.py:94
+#: merchantapp/models.py:97
 msgid "ConditionType"
 msgstr "Тип условия"
 
-#: merchantapp/models.py:112
+#: merchantapp/models.py:115
 msgid "Status"
 msgstr "Статус"
 
-#: merchantapp/models.py:115
+#: merchantapp/models.py:118
 msgid "Price"
 msgstr "Цена"
 
-#: merchantapp/models.py:117 merchantapp/models.py:127
+#: merchantapp/models.py:120 merchantapp/models.py:130
 msgid "Program"
 msgstr "Программа"
 
-#: merchantapp/models.py:128
+#: merchantapp/models.py:131
 msgid "ExpireDate"
 msgstr "Дата истечения"
 
-#: merchantapp/models.py:129
+#: merchantapp/models.py:132
 msgid "Redeemed"
 msgstr "Выдан"
 
-#: merchantapp/models.py:136
+#: merchantapp/models.py:139
 msgid "TitleZ"
 msgstr "Заголовок"
 
-#: merchantapp/models.py:137
+#: merchantapp/models.py:140
 msgid "Text"
 msgstr "Текст"
 
-#: merchantapp/models.py:139
+#: merchantapp/models.py:142
 msgid "Author"
 msgstr "Автор"
 
-#: merchantapp/templates/base.html:23
+#: merchantapp/templates/base.html:24
 msgid "MainLink"
 msgstr "Главная"
 
-#: merchantapp/templates/base.html:31
+#: merchantapp/templates/base.html:33
 msgid "ProgramsLink"
 msgstr "Программы"
 
-#: merchantapp/templates/base.html:34
+#: merchantapp/templates/base.html:36
 msgid "BranchLink"
 msgstr "Заведения"
 
-#: merchantapp/templates/base.html:37
+#: merchantapp/templates/base.html:39
+msgid "Staff"
+msgstr "Сотрудники"
+
+#: merchantapp/templates/base.html:42
 msgid "Clients"
 msgstr "Клиенты"
 
-#: merchantapp/templates/base.html:40
+#: merchantapp/templates/base.html:46
 msgid "Logout"
 msgstr "Выйти"
 
-#: merchantapp/templates/base.html:44
+#: merchantapp/templates/base.html:50
 msgid "Login"
 msgstr "Войти"
 
-#: merchantapp/templates/index.html:8
+#: merchantapp/templates/branches/branch_list.html:4
+msgid "BranchesTitle"
+msgstr "Заведения"
+
+#: merchantapp/templates/branches/branch_list.html:5
+msgid "Add new branch point"
+msgstr "Добавить точку"
+
+#: merchantapp/templates/branches/branch_list.html:10
+msgid "Address"
+msgstr "Адрес"
+
+#: merchantapp/templates/branches/branch_list.html:12
+#: merchantapp/templates/employees/employees_list.html:11
+#: merchantapp/templates/program.html:13
+msgid "Actions"
+msgstr "Действия"
+
+#: merchantapp/templates/branches/branch_list.html:23
+#: merchantapp/templates/program.html:23
+msgid "Refresh"
+msgstr "Обновить"
+
+#: merchantapp/templates/customers/customers_list.html:4
+msgid "Active clients"
+msgstr "Активные клиенты"
+
+#: merchantapp/templates/customers/customers_list.html:6
+msgid "Upload to CSV"
+msgstr "Выгрузить в CSV"
+
+#: merchantapp/templates/customers/customers_list.html:9
+msgid "SearchByPhoneNumber"
+msgstr "Искать по номеру телефона"
+
+#: merchantapp/templates/customers/customers_list.html:10
+#: merchantapp/templates/index.html:7 merchantapp/templates/index.html:8
 msgid "Search"
 msgstr "Искать"
+
+#: merchantapp/templates/customers/customers_list.html:17
+#: merchantapp/templates/employees/employees_list.html:9
+msgid "NumberPhone"
+msgstr "Номер телефона"
+
+#: merchantapp/templates/customers/customers_list.html:19
+msgid "Total orders"
+msgstr "Всего заказов"
+
+#: merchantapp/templates/customers/customers_list.html:20
+msgid "Awards received"
+msgstr "Получено наград"
+
+#: merchantapp/templates/customers/customers_list.html:21
+msgid "Date of registration"
+msgstr "Дата регистрации"
+
+#: merchantapp/templates/employees/employees_list.html:4
+msgid "Establishment employees"
+msgstr "Работники заведения"
+
+#: merchantapp/templates/employees/employees_list.html:5
+msgid "Add employee"
+msgstr "Добавить сотрудника"
 
 #: merchantapp/templates/index.html:17
 msgid "Available awards:"
@@ -300,6 +373,10 @@ msgstr "Оформить заказ"
 msgid "Purchase history"
 msgstr "История заказов"
 
+#: merchantapp/templates/partial/form.html:23
+msgid "Back"
+msgstr ""
+
 #: merchantapp/templates/program.html:4
 msgid "Programs"
 msgstr "Программы"
@@ -307,11 +384,3 @@ msgstr "Программы"
 #: merchantapp/templates/program.html:5
 msgid "Add program"
 msgstr "Добавить программу"
-
-#: merchantapp/templates/program.html:14
-msgid "Actions"
-msgstr "Действия"
-
-#: merchantapp/templates/program.html:25
-msgid "Refresh"
-msgstr "Обновить"

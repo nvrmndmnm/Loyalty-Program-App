@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
-    <h1>Заведения</h1>
-    <a href="{% url 'merchantapp:branch_create' %}">Добавить точку</a>
+    <h1>{% trans "BranchesTitle" %}</h1>
+    <a href="{% url 'merchantapp:branch_create' %}">{% blocktrans %}Add new branch point{% endblocktrans %}</a>
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col">Название</th>
-            <th scope="col">Адрес</th>
-            <th scope="col">Активна</th>
-            <th scope="col">Действия</th>
+            <th scope="col">{% trans "Title" %}</th>
+            <th scope="col">{% trans "Address" %}</th>
+            <th scope="col">{% trans "Active" %}</th>
+            <th scope="col">{% trans "Actions" %}</th>
         </tr>
         </thead>
         <tbody>
@@ -19,7 +20,7 @@
                     {{ branch.address.building }}
                     {{ branch.address.apartment|default_if_none:'' }}</td>
                 <td>{{ branch.active|yesno:"да, нет" }}</td>
-                <td><a href="{% url 'merchantapp:branch_update' branch.pk %}">Обновить</a></td>
+                <td><a href="{% url 'merchantapp:branch_update' branch.pk %}">{% trans "Refresh" %}</a></td>
             </tr>
         {% endfor %}
         </tbody>

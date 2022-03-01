@@ -1,4 +1,5 @@
 {% csrf_token %}
+{% load i18n %}
 {% for error in form.non_field_errors %}
     <p class="form-error">{{ error }}</p>
 {% endfor %}
@@ -19,6 +20,6 @@
     <hr>
     <div class="form-buttons d-flex justify-content-end">
         <button class="btn btn-secondary me-3" type="submit">{{ button_text }}</button>
-        <a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">Назад</a>
+        <a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">{% trans "Back" %}</a>
     </div>
 {% endif %}

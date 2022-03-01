@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-17 20:36+0600\n"
+"POT-Creation-Date: 2022-03-01 19:21+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Loyalty_Program_App/settings.py:137
+#: Loyalty_Program_App/settings.py:99
 msgid "Russian"
 msgstr "Орысша"
 
-#: Loyalty_Program_App/settings.py:138
+#: Loyalty_Program_App/settings.py:100
 msgid "Kazakh"
 msgstr "Қазақша"
 
@@ -50,6 +50,8 @@ msgid "DateOfBirth"
 msgstr "Туған жылы"
 
 #: accounts/models.py:41 accounts/templates/user_detail.html:16
+#: merchantapp/templates/customers/customers_list.html:18
+#: merchantapp/templates/employees/employees_list.html:10
 msgid "Name"
 msgstr "Аты"
 
@@ -81,8 +83,8 @@ msgstr "Профильді өзгерту"
 msgid "EditButton"
 msgstr "Өзгерту"
 
-#: accounts/templates/user_detail.html:4 merchantapp/models.py:111
-#: merchantapp/models.py:125
+#: accounts/templates/user_detail.html:4 merchantapp/models.py:114
+#: merchantapp/models.py:128
 msgid "User"
 msgstr "Пайдаланушы"
 
@@ -126,18 +128,19 @@ msgstr "Құрылған уақыт"
 msgid "TimeUpdated"
 msgstr "Жаңартылған уақыт"
 
-#: merchantapp/models.py:19
+#: merchantapp/models.py:19 merchantapp/templates/branches/branch_list.html:11
 msgid "Active"
 msgstr "Іске қосу"
 
-#: merchantapp/models.py:26 merchantapp/models.py:37 merchantapp/models.py:61
-#: merchantapp/models.py:85 merchantapp/models.py:102
+#: merchantapp/models.py:26 merchantapp/models.py:38 merchantapp/models.py:63
+#: merchantapp/models.py:88 merchantapp/models.py:105
 msgid "Identifier"
 msgstr "Идентификатор"
 
-#: merchantapp/models.py:27 merchantapp/models.py:38 merchantapp/models.py:62
-#: merchantapp/models.py:86 merchantapp/models.py:103
-#: merchantapp/templates/program.html:10
+#: merchantapp/models.py:27 merchantapp/models.py:39 merchantapp/models.py:64
+#: merchantapp/models.py:89 merchantapp/models.py:106
+#: merchantapp/templates/branches/branch_list.html:9
+#: merchantapp/templates/program.html:9
 msgid "Title"
 msgstr "Тақырып"
 
@@ -146,137 +149,206 @@ msgid "Supervisor"
 msgstr "Жетекші"
 
 #: merchantapp/models.py:30
+msgid "Employees"
+msgstr ""
+
+#: merchantapp/models.py:31
 msgid "Category"
 msgstr "Санат"
 
-#: merchantapp/models.py:39
+#: merchantapp/models.py:41
 msgid "Partner"
 msgstr "Серіктес"
 
-#: merchantapp/models.py:41 merchantapp/models.py:69
-#: merchantapp/templates/program.html:13
+#: merchantapp/models.py:43 merchantapp/models.py:72
+#: merchantapp/templates/program.html:12
 msgid "Description"
 msgstr "Сипаттама"
 
-#: merchantapp/models.py:48
+#: merchantapp/models.py:50
 msgid "Street"
 msgstr "Көше"
 
-#: merchantapp/models.py:49
+#: merchantapp/models.py:51
 msgid "Building"
 msgstr "Ғимарат"
 
-#: merchantapp/models.py:50
+#: merchantapp/models.py:52
 msgid "Office"
 msgstr "Кеңсе"
 
-#: merchantapp/models.py:51
+#: merchantapp/models.py:53
 msgid "City"
 msgstr "Қала"
 
-#: merchantapp/models.py:52
+#: merchantapp/models.py:54
 msgid "LinkTo2GIS"
 msgstr "2GIS-ке сілтеме"
 
-#: merchantapp/models.py:53
+#: merchantapp/models.py:55
 msgid "Latitude"
 msgstr "Ендік"
 
-#: merchantapp/models.py:54
+#: merchantapp/models.py:56
 msgid "Longitude"
 msgstr "Бойлық"
 
-#: merchantapp/models.py:64 merchantapp/templates/program.html:11
+#: merchantapp/models.py:66 merchantapp/templates/program.html:10
 msgid "Condition"
 msgstr "Шарт"
 
-#: merchantapp/models.py:65 merchantapp/templates/program.html:12
+#: merchantapp/models.py:68 merchantapp/templates/program.html:11
 msgid "Reward"
 msgstr "Сыйлық"
 
-#: merchantapp/models.py:66
+#: merchantapp/models.py:69
 msgid "Branch"
 msgstr "Мекеме"
 
-#: merchantapp/models.py:67
+#: merchantapp/models.py:70
 msgid "StartDate"
 msgstr "Басталған күн"
 
-#: merchantapp/models.py:68 merchantapp/models.py:113
+#: merchantapp/models.py:71 merchantapp/models.py:116
 msgid "EndDate"
 msgstr "Аяқталған күн"
 
-#: merchantapp/models.py:77
+#: merchantapp/models.py:80
 msgid "RewardType"
 msgstr "Сыйлық түрі"
 
-#: merchantapp/models.py:78 merchantapp/models.py:95 merchantapp/models.py:114
+#: merchantapp/models.py:81 merchantapp/models.py:98 merchantapp/models.py:117
 msgid "Amount"
 msgstr "Саны"
 
-#: merchantapp/models.py:94
+#: merchantapp/models.py:97
 msgid "ConditionType"
 msgstr "Шарт түрі"
 
-#: merchantapp/models.py:112
+#: merchantapp/models.py:115
 msgid "Status"
 msgstr "Статус"
 
-#: merchantapp/models.py:115
+#: merchantapp/models.py:118
 msgid "Price"
 msgstr "Баға"
 
-#: merchantapp/models.py:117 merchantapp/models.py:127
+#: merchantapp/models.py:120 merchantapp/models.py:130
 msgid "Program"
 msgstr "Программа"
 
-#: merchantapp/models.py:128
+#: merchantapp/models.py:131
 msgid "ExpireDate"
 msgstr "Қолданылу мерзімі"
 
-#: merchantapp/models.py:129
+#: merchantapp/models.py:132
 msgid "Redeemed"
 msgstr "Өтелді"
 
-#: merchantapp/models.py:136
+#: merchantapp/models.py:139
 msgid "TitleZ"
 msgstr "Тақырып"
 
-#: merchantapp/models.py:137
+#: merchantapp/models.py:140
 msgid "Text"
 msgstr "Мәтін"
 
-#: merchantapp/models.py:139
+#: merchantapp/models.py:142
 msgid "Author"
 msgstr "Автор"
 
-#: merchantapp/templates/base.html:23
+#: merchantapp/templates/base.html:24
 msgid "MainLink"
 msgstr "Негізгі сілтеме"
 
-#: merchantapp/templates/base.html:31
+#: merchantapp/templates/base.html:33
 msgid "ProgramsLink"
 msgstr "Бағдарламалар"
 
-#: merchantapp/templates/base.html:34
+#: merchantapp/templates/base.html:36
 msgid "BranchLink"
 msgstr "Мекемелер"
 
-#: merchantapp/templates/base.html:37
+#: merchantapp/templates/base.html:39
+msgid "Staff"
+msgstr "Қызметкерлер"
+
+#: merchantapp/templates/base.html:42
 msgid "Clients"
 msgstr "Клиенттер"
 
-#: merchantapp/templates/base.html:40
+#: merchantapp/templates/base.html:46
 msgid "Logout"
 msgstr "Шығу"
 
-#: merchantapp/templates/base.html:44
+#: merchantapp/templates/base.html:50
 msgid "Login"
 msgstr "Кіру"
 
-#: merchantapp/templates/index.html:8
+#: merchantapp/templates/branches/branch_list.html:4
+msgid "BranchesTitle"
+msgstr "Мекемелер"
+
+#: merchantapp/templates/branches/branch_list.html:5
+msgid "Add new branch point"
+msgstr "Жаңа мекеме орнын қосу"
+
+#: merchantapp/templates/branches/branch_list.html:10
+msgid "Address"
+msgstr "Мекенжай"
+
+#: merchantapp/templates/branches/branch_list.html:12
+#: merchantapp/templates/employees/employees_list.html:11
+#: merchantapp/templates/program.html:13
+msgid "Actions"
+msgstr "Әрекеттер"
+
+#: merchantapp/templates/branches/branch_list.html:23
+#: merchantapp/templates/program.html:23
+msgid "Refresh"
+msgstr "Жаңарту"
+
+#: merchantapp/templates/customers/customers_list.html:4
+msgid "Active clients"
+msgstr "Белсенді клиенттер"
+
+#: merchantapp/templates/customers/customers_list.html:6
+msgid "Upload to CSV"
+msgstr "CSV файлына жүктеу"
+
+#: merchantapp/templates/customers/customers_list.html:9
+msgid "SearchByPhoneNumber"
+msgstr "Телефон нөмірі бойынша іздеу"
+
+#: merchantapp/templates/customers/customers_list.html:10
+#: merchantapp/templates/index.html:7 merchantapp/templates/index.html:8
 msgid "Search"
 msgstr "Іздеу"
+
+#: merchantapp/templates/customers/customers_list.html:17
+#: merchantapp/templates/employees/employees_list.html:9
+msgid "NumberPhone"
+msgstr "Телефон нөмірі"
+
+#: merchantapp/templates/customers/customers_list.html:19
+msgid "Total orders"
+msgstr "Жалпы тапсырыстар"
+
+#: merchantapp/templates/customers/customers_list.html:20
+msgid "Awards received"
+msgstr "Марапаттары алынды"
+
+#: merchantapp/templates/customers/customers_list.html:21
+msgid "Date of registration"
+msgstr "Тіркеу күні"
+
+#: merchantapp/templates/employees/employees_list.html:4
+msgid "Establishment employees"
+msgstr "Мекеме қызметкерлері"
+
+#: merchantapp/templates/employees/employees_list.html:5
+msgid "Add employee"
+msgstr "Қызметкерді қосу"
 
 #: merchantapp/templates/index.html:17
 msgid "Available awards:"
@@ -298,6 +370,10 @@ msgstr "Тапсырыс беру"
 msgid "Purchase history"
 msgstr "Тапсырыс тарихы"
 
+#: merchantapp/templates/partial/form.html:23
+msgid "Back"
+msgstr ""
+
 #: merchantapp/templates/program.html:4
 msgid "Programs"
 msgstr "Бағдарламалар"
@@ -305,11 +381,3 @@ msgstr "Бағдарламалар"
 #: merchantapp/templates/program.html:5
 msgid "Add program"
 msgstr "Бағдарлама қосу"
-
-#: merchantapp/templates/program.html:14
-msgid "Actions"
-msgstr "Әрекеттер"
-
-#: merchantapp/templates/program.html:25
-msgid "Refresh"
-msgstr "Жаңарту"

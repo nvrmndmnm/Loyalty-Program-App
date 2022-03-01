@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
-    <h1>Работники заведения</h1>
-    <a href="{% url 'merchantapp:employee_add' %}">Добавить сотрудника</a>
+    <h1>{% blocktrans %}Establishment employees{% endblocktrans %}</h1>
+    <a href="{% url 'merchantapp:employee_add' %}">{% blocktrans %}Add employee{% endblocktrans %}</a>
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col" style="width: 10%">Номер телефона</th>
-            <th scope="col" style="width: 10%">Имя</th>
-            <th scope="col" style="width: 10%">Действия</th>
+            <th scope="col" style="width: 10%">{% trans "NumberPhone" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Name" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Actions" %}</th>
         </tr>
         </thead>
         <tbody>
