@@ -1,6 +1,7 @@
 from django import forms
 from merchantapp.models import Program, ProgramCondition, ProgramConditionType, ProgramReward, ProgramRewardType,\
     Branch, Address
+from django.utils.translation import gettext_lazy as _
 
 
 class UserSearchForm(forms.Form):
@@ -8,8 +9,8 @@ class UserSearchForm(forms.Form):
 
 
 class ProgramForm(forms.ModelForm):
-    condition = forms.IntegerField(min_value=0, label='Требуется покупок')
-    reward = forms.IntegerField(min_value=0, label='Будет начислено наград')
+    condition = forms.IntegerField(min_value=0, label=_('ShoppingRequired'))
+    reward = forms.IntegerField(min_value=0, label=_('RewardsWillBeGiven'))
 
     def clean(self):
         cleaned_data = super().clean()

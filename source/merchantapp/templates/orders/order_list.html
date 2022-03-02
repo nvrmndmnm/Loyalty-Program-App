@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
-    <h1>Заказы пользователя</h1>
-    <a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">Назад</a>
+    <h1>{% trans "UserOrders" %}</h1>
+    <a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">{% trans "Back" %}</a>
     <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 5%">Кол-во</th>
-            <th scope="col" style="width: 5%">Цена</th>
-            <th scope="col" style="width: 10%">Программа</th>
-            <th scope="col" style="width: 15%">Описание</th>
-            <th scope="col" style="width: 10%">Дата</th>
+            <th scope="col" style="width: 5%">{% trans "Am-ount" %}</th>
+            <th scope="col" style="width: 5%">{% trans "Price" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Program" %}</th>
+            <th scope="col" style="width: 15%">{% trans "Description" %}</th>
+            <th scope="col" style="width: 10%">{% trans "Date" %}</th>
         </tr>
         </thead>
         <tbody>

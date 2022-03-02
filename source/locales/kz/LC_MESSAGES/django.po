@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 19:21+0600\n"
+"POT-Creation-Date: 2022-03-02 12:41+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,11 @@ msgstr "Орысша"
 #: Loyalty_Program_App/settings.py:100
 msgid "Kazakh"
 msgstr "Қазақша"
+
+#: accounts/forms.py:55 merchantapp/templates/customers/customers_list.html:17
+#: merchantapp/templates/employees/employees_list.html:9
+msgid "NumberPhone"
+msgstr "Телефон нөмірі"
 
 #: accounts/models.py:10
 msgid "TheGivenPhoneMustBeSet"
@@ -104,6 +109,14 @@ msgstr "Құпия сөзді өзгерту"
 msgid "User's phone number: "
 msgstr "Пайдаланушының телефон нөмірі: "
 
+#: merchantapp/forms.py:12
+msgid "ShoppingRequired"
+msgstr "Сатып алу қажет"
+
+#: merchantapp/forms.py:13
+msgid "RewardsWillBeGiven"
+msgstr "Сыйлықтар беріледі"
+
 #: merchantapp/models.py:7
 msgid "Returned"
 msgstr "Қайтарылды"
@@ -161,6 +174,7 @@ msgid "Partner"
 msgstr "Серіктес"
 
 #: merchantapp/models.py:43 merchantapp/models.py:72
+#: merchantapp/templates/orders/order_list.html:13
 #: merchantapp/templates/program.html:12
 msgid "Description"
 msgstr "Сипаттама"
@@ -229,11 +243,12 @@ msgstr "Шарт түрі"
 msgid "Status"
 msgstr "Статус"
 
-#: merchantapp/models.py:118
+#: merchantapp/models.py:118 merchantapp/templates/orders/order_list.html:11
 msgid "Price"
 msgstr "Баға"
 
 #: merchantapp/models.py:120 merchantapp/models.py:130
+#: merchantapp/templates/orders/order_list.html:12
 msgid "Program"
 msgstr "Программа"
 
@@ -314,7 +329,7 @@ msgstr "Белсенді клиенттер"
 
 #: merchantapp/templates/customers/customers_list.html:6
 msgid "Upload to CSV"
-msgstr "CSV файлына жүктеу"
+msgstr "CSV файлын жүктеу"
 
 #: merchantapp/templates/customers/customers_list.html:9
 msgid "SearchByPhoneNumber"
@@ -324,11 +339,6 @@ msgstr "Телефон нөмірі бойынша іздеу"
 #: merchantapp/templates/index.html:7 merchantapp/templates/index.html:8
 msgid "Search"
 msgstr "Іздеу"
-
-#: merchantapp/templates/customers/customers_list.html:17
-#: merchantapp/templates/employees/employees_list.html:9
-msgid "NumberPhone"
-msgstr "Телефон нөмірі"
 
 #: merchantapp/templates/customers/customers_list.html:19
 msgid "Total orders"
@@ -342,13 +352,21 @@ msgstr "Марапаттары алынды"
 msgid "Date of registration"
 msgstr "Тіркеу күні"
 
-#: merchantapp/templates/employees/employees_list.html:4
-msgid "Establishment employees"
-msgstr "Мекеме қызметкерлері"
-
+#: merchantapp/templates/employees/employee_add.html:5
 #: merchantapp/templates/employees/employees_list.html:5
 msgid "Add employee"
 msgstr "Қызметкерді қосу"
+
+#: merchantapp/templates/employees/employee_add.html:6
+msgid ""
+"Enter the phone number of the user you want to add to the employee list."
+msgstr ""
+"Қызметкерлер тізіміне қосқыңыз келетін пайдаланушының телефон нөмірін "
+"енгізіңіз."
+
+#: merchantapp/templates/employees/employees_list.html:4
+msgid "Establishment employees"
+msgstr "Мекеме қызметкерлері"
 
 #: merchantapp/templates/index.html:17
 msgid "Available awards:"
@@ -370,9 +388,24 @@ msgstr "Тапсырыс беру"
 msgid "Purchase history"
 msgstr "Тапсырыс тарихы"
 
+#: merchantapp/templates/orders/order_list.html:4
+msgid "UserOrders"
+msgstr "Пайдаланушының тапсырыстары"
+
+#: merchantapp/templates/orders/order_list.html:5
 #: merchantapp/templates/partial/form.html:23
 msgid "Back"
-msgstr ""
+msgstr "Артқа"
+
+#: merchantapp/templates/orders/order_list.html:10
+#, fuzzy
+#| msgid "Amount"
+msgid "Am-ount"
+msgstr "Саны"
+
+#: merchantapp/templates/orders/order_list.html:14
+msgid "Date"
+msgstr "Күні"
 
 #: merchantapp/templates/program.html:4
 msgid "Programs"
@@ -381,3 +414,7 @@ msgstr "Бағдарламалар"
 #: merchantapp/templates/program.html:5
 msgid "Add program"
 msgstr "Бағдарлама қосу"
+
+#: merchantapp/views.py:420
+msgid "UserDoesNotExist."
+msgstr "Мұндай пайдаланушы жоқ."

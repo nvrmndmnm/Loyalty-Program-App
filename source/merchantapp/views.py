@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlencode, urlsafe_base64_encode
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import PasswordRequestForm
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
@@ -416,7 +417,7 @@ def add_merchant_employee(request):
                     return redirect("accounts:password_reset_done")
                 return redirect('merchantapp:employees_list')
         else:
-            context['error'] = 'Такого пользователя не существует.'
+            context['error'] = _('UserDoesNotExist.')
     return render(request, 'employees/employee_add.html', context)
 
 
