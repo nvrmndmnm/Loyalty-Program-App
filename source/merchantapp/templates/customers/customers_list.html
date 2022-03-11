@@ -27,7 +27,7 @@
                 <td><a class="text-decoration-none" href="{% url 'merchantapp:orders' customer.id %}">{{ customer.first_name }} {{ customer.last_name }}</a></td>
                 <td>{{ customer.order_user.count }}</td>
                 <td>{{ customer.user_reward.count }}</td>
-                <td>{{ customer.date_joined }}</td>
+                <td>{{ customer.date_joined|date:'d-m-Y'}}</td>
             </tr>
         {% endfor %}
         </tbody>
