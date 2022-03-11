@@ -18,7 +18,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from accounts.forms import PasswordRequestForm
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
 from merchantapp.models import Program, Branch, Order, UserReward, Merchant
-
+from merchantapp.templatetags import merchant_tags
 
 class PermissionAccessMixin(UserPassesTestMixin):
     def test_func(self):
@@ -346,8 +346,11 @@ def add_user_reward(customer, program):
 
 def redeem_user_reward(request, **kwargs):
     user = get_user_model().objects.get(pk=kwargs.get('pk'))
+    merchant = Merchant.objects.filter(Q(director=request.user.pk) | Q(employees=request.user.pk)).first()
+    branches = Branch.objects.filter(merchant=merchant)
+    programs = Program.objects.filter(branch__in=branches)
     reward = UserReward.objects.filter(user=user, redeemed=False).first()
-    if reward:
+    if reward and reward.program in programs:
         reward.redeemed = True
         reward.save()
         send_notification_to_bot(user.id,
@@ -366,13 +369,19 @@ def access_required(function):
     return wrapper
 
 
-@access_required
 def download_customers_file(request, **kwargs):
     file_name = 'customers.csv'
     lines = ['Номер телефона, Имя, Всего заказов, Всего наград, Дата регистрации']
-    data = get_user_model().objects.all()
+    merchant = Merchant.objects.filter(Q(director=request.user.pk) | Q(employees=request.user.pk)).first()
+    branches = Branch.objects.filter(merchant=merchant)
+    programs = Program.objects.filter(branch__in=branches)
+    orders = Order.objects.filter(program__in=programs)
+    data = get_user_model().objects.filter(order_user__in=orders).distinct().order_by('-date_joined')
     for d in data:
-        lines.append(f'{d.phone}, {d.name}, {d.order_user.count()}, {d.user_reward.count()}, {d.date_joined}')
+        lines.append(f'{d.phone}, {" ".join([d.first_name, d.last_name]).strip()},'
+                     f' {merchant_tags.total_count(d.order_user, request.user)},'
+                     f' {merchant_tags.total_count(d.user_reward, request.user)},'
+                     f' {d.date_joined}')
     response_content = '\n'.join(lines)
     response = HttpResponse(response_content, content_type="text/plain,charset=utf8")
     response['Content-Disposition'] = 'attachment; filename={0}'.format(file_name)
