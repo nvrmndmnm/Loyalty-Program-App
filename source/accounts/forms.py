@@ -52,11 +52,4 @@ class PasswordChangeForm(forms.ModelForm):
 
 class PasswordRequestForm(forms.Form):
     phone = UsernameField(widget=forms.TextInput(attrs={'autofocus': True}), label='Номер телефона')
-
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        try:
-            get_user_model().objects.get(phone=phone)
-        except ObjectDoesNotExist:
-            raise forms.ValidationError('User not found')
-        return phone
+    email = forms.EmailField(required=False)

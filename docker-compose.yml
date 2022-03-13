@@ -88,6 +88,45 @@ services:
       - static:/home/app/web/static
       - ./source/uploads:/home/app/web/media
 
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App worker -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App beat -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
+
 volumes:
   postgres_data:
   static:
