@@ -16,5 +16,9 @@ urlpatterns = [
     path('branches/<int:pk>/update/', merchant_views.BranchUpdateView.as_view(), name='branch_update'),
     path('orders/<int:pk>/', merchant_views.OrderProcessingView.as_view(), name='orders'),
     path('orders/create/', merchant_views.OrderCreateView.as_view(), name='order_create'),
-    path('orders/<int:pk>/redeem/', merchant_views.redeem_user_reward, name='redeem_user_reward')
+    path('orders/<int:pk>/redeem/', merchant_views.redeem_user_reward, name='redeem_user_reward'),
+    path('employees/', merchant_views.EmployeeListView.as_view(), name='employees_list'),
+    path('employees/<int:pk>/', merchant_views.EmployeeDetailsView.as_view(), name='employee_details'),
+    path('employees/add/', merchant_views.add_merchant_employee, name='employee_add'),
+    path('employees/<int:pk>/remove/', merchant_views.remove_merchant_employee, name='employee_remove'),
 ]

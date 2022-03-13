@@ -25,6 +25,46 @@ services:
       - db
     env_file:
       - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls
+
+  cp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate &&
+      gunicorn --bind 0.0.0.0:8001 Loyalty_Program_App.wsgi -w 3"
+    volumes:
+      - ./source:/code
+      - static:/home/app/web/static
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_admin
+      - ALLOWED_HOSTS=cp.localhost cp.allcard.me
+
+  home:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate &&
+      gunicorn --bind 0.0.0.0:8002 Loyalty_Program_App.wsgi -w 3"
+    volumes:
+      - ./source:/code
+      - static:/home/app/web/static
+    ports:
+      - "8002:8002"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - APP_ROOT_URLCONF=Loyalty_Program_App.urls_home
+      - ALLOWED_HOSTS=localhost allcard.me
 
   bot:
     build:
@@ -47,6 +87,45 @@ services:
     volumes:
       - static:/home/app/web/static
       - ./source/uploads:/home/app/web/media
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App worker -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App beat -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
 
 volumes:
   postgres_data:

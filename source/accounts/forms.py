@@ -1,7 +1,7 @@
 from django import forms
-from django.forms import widgets
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserAdminCreationForm(UserCreationForm):
@@ -48,3 +48,8 @@ class PasswordChangeForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ["old_password", "password", "password_confirm"]
+
+
+class PasswordRequestForm(forms.Form):
+    phone = UsernameField(widget=forms.TextInput(attrs={'autofocus': True}), label='Номер телефона')
+    email = forms.EmailField(required=False)

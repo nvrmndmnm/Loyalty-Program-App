@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="w-50">
+        <h2 class="font-weight-bold my-4">Добавить сотрудника</h2>
+        <p>Введите номер телефона пользователя, которого необходимо добавить в список сотрудников.</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% include 'partial/form.html' with button_text='Отправить' %}
+            {{ error }}
+        </form>
+    </div>
+{% endblock %}
