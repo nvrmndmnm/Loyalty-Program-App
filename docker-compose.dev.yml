@@ -19,6 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    command: bash -c "python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./source:/code
     ports:
@@ -34,6 +35,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    command: bash -c "python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./source:/code
     ports:
@@ -53,6 +55,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    command: bash -c "python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./source:/code
     ports:
@@ -67,6 +70,45 @@ services:
     environment:
       - APP_ROOT_URLCONF=Loyalty_Program_App.urls_home
       - ALLOWED_HOSTS=localhost allcard.me 127.0.0.1
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App worker -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: celery -A Loyalty_Program_App beat -l info
+    volumes:
+      - ./source:/code
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Almaty
+    env_file:
+      - .env.dev
 
 volumes:
   postgres_data:

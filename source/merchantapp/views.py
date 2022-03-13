@@ -1,4 +1,6 @@
 import datetime
+from datetime import timedelta
+import json
 import os
 
 import requests
@@ -14,7 +16,9 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlencode, urlsafe_base64_encode
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django_celery_beat.models import ClockedSchedule, PeriodicTask
 
+from Loyalty_Program_App import settings
 from accounts.forms import PasswordRequestForm
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
 from merchantapp.models import Program, Branch, Order, UserReward, Merchant
@@ -404,7 +408,11 @@ def add_merchant_employee(request):
         request_form = PasswordRequestForm(request.POST)
         if request_form.is_valid():
             phone = request_form.cleaned_data['phone']
-            user = get_object_or_404(get_user_model(), phone=phone)
+            email = request_form.cleaned_data['email']
+            user, created = get_user_model().objects.get_or_create(phone=phone)
+            if created and email:
+                user.email = email
+                user.save()
             qs = Q(director=request.user.pk) | Q(employees=request.user.pk)
             merchant = Merchant.objects.filter(qs).first()
             if user and merchant:
@@ -416,16 +424,31 @@ def add_merchant_employee(request):
                     domain = f'{os.getenv("CABINET_SITE")}accounts/reset'
                     uid = urlsafe_base64_encode(force_bytes(user.pk))
                     token = default_token_generator.make_token(user)
-                    message = f'{domain}/{uid}/{token}/'
+                    reset_link = f'{domain}/{uid}/{token}/'
 
                     try:
-                        send_notification_to_bot(user.id, message)
+                        if email:
+                            clocked = ClockedSchedule.objects.create(clocked_time=timezone.now() + timedelta(seconds=5))
+                            PeriodicTask.objects.create(task='send_email',
+                                                        name=f'password reset email at {timezone.now()}',
+                                                        one_off=True,
+                                                        clocked=clocked,
+                                                        args=json.dumps([
+                                                            f'Регистрация сотрудника в сервисе Allcard.me',
+                                                            reset_link,
+                                                            settings.EMAIL_HOST_USER,
+                                                            email
+                                                        ])
+                                                        )
+                        send_notification_to_bot(user.id, reset_link)
                     except Exception as e:
                         return HttpResponse('Произошла ошибка: ' + str(e))
                     return redirect("accounts:password_reset_done")
                 return redirect('merchantapp:employees_list')
+            else:
+                context['error'] = 'Что-то пошло не так.'
         else:
-            context['error'] = 'Такого пользователя не существует.'
+            context['error'] = 'Проверьте корректность вводимых данных.'
     return render(request, 'employees/employee_add.html', context)
 
 

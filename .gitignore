@@ -5,6 +5,7 @@ __pycache__
 **.pyc
 conf.py
 LoyaltyBot/media
+LoyaltyBot/bot
 .env
 .env.dev
 source/static
