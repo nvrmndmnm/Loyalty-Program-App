@@ -82,11 +82,13 @@ services:
     build: ./nginx
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - web
     volumes:
       - static:/home/app/web/static
       - ./source/uploads:/home/app/web/media
+      - /etc/letsencrypt/:/etc/letsencrypt/
 
   redis:
     image: "redis:alpine"
