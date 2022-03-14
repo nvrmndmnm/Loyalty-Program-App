@@ -108,7 +108,7 @@ services:
     environment:
       - TZ=Asia/Almaty
     env_file:
-      - .env.dev
+      - .env
 
   celery-beat:
     build:
@@ -125,7 +125,7 @@ services:
     environment:
       - TZ=Asia/Almaty
     env_file:
-      - .env.dev
+      - .env
 
 volumes:
   postgres_data:
