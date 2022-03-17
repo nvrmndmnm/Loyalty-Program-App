@@ -12,3 +12,4 @@ uplink~=0.9.4
 celery==5.2.3
 django-celery-beat==2.2.1
 redis==4.1.4
+sentry-sdk==1.5.7

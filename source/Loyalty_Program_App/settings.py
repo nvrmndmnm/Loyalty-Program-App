@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.utils.translation import gettext_lazy as _
 
@@ -180,3 +181,21 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_TLS')))
 EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL')))
+
+SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://c5704739e33b428f8b559892c890da21@o1170377.ingest.sentry.io/6263863')
+SENTRY_ENVIRONMENT = os.getenv('SENTRY_ENVIRONMENT', 'dev')
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+    environment=SENTRY_ENVIRONMENT,
+)
