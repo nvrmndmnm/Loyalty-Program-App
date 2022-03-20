@@ -182,7 +182,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_TLS')))
 EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL')))
 
-SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://c5704739e33b428f8b559892c890da21@o1170377.ingest.sentry.io/6263863')
+SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://40b7eb16f61a4add94d87ea555f1d388@o1172841.ingest.sentry.io/6267748')
 SENTRY_ENVIRONMENT = os.getenv('SENTRY_ENVIRONMENT', 'dev')
 
 sentry_sdk.init(
