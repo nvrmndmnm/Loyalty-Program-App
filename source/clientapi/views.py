@@ -1,16 +1,13 @@
 import datetime
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
-from rest_framework.generics import CreateAPIView, GenericAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-
-from merchantapp.models import Branch, Order, UserReward
 from clientapi.serializers import UserSerializer, BranchWriteSerializer, BranchReadSerializer, \
     ArticleWriteSerializer, ArticleReadSerializer, UserRewardWriteSerializer, UserRewardReadSerializer
-from merchantapp.models import Branch, Article, UserReward, Program, ProgramCondition
+from merchantapp.models import Order, Branch, Article, UserReward, Program
 
 
 class UserCreateAPIView(CreateAPIView, UpdateAPIView):
@@ -21,7 +18,7 @@ class UserCreateAPIView(CreateAPIView, UpdateAPIView):
     def get_object(self):
         try:
             return get_object_or_404(get_user_model(), phone=self.request.data['phone'])
-        except:
+        except Exception:
             return None
 
     def post(self, request, *args, **kwargs):

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from merchantapp.models import Branch, Article , UserReward
+from merchantapp.models import Branch, Article, UserReward
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
 class ArticleReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ["time_created","title", "text"]
+        fields = ["time_created", "title", "text"]
 
 
 class UserRewardWriteSerializer(serializers.ModelSerializer):

@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.management import call_command
 
+
 class TestMerchantPermissions(TestCase):
     def setUP(self):
         call_command("loaddata", "fixtures/tests/dump.json")
@@ -30,6 +31,7 @@ class TestMerchantPermissions(TestCase):
     def test_permissions_employees(self):
         response = self.client.get("/ru/employees/")
         self.assertEqual(302, response.status_code)
+
     # Нужно исправить баг в пермишенах
     def test_permissions_employees_create(self):
         response = self.client.get("/ru/employees/add/")
@@ -133,7 +135,6 @@ class TestRendersCorrectTemplate(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "index.html")
 
-
     def test_programs(self):
         response = self.client.get(reverse("merchantapp:programs"))
         self.assertEqual(200, response.status_code)
@@ -159,12 +160,10 @@ class TestRendersCorrectTemplate(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "employees/employees_list.html")
 
-
     def test_employees_add(self):
         response = self.client.get(reverse('merchantapp:employee_add'))
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "employees/employee_add.html")
-
 
     def test_customers(self):
         response = self.client.get(reverse('merchantapp:customers'))

@@ -2,10 +2,8 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model, update_session_auth_hash
-
 from accounts.forms import PasswordChangeForm, UserChangeForm
-
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from accounts.forms import UserAdminCreationForm
 
 

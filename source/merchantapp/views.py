@@ -2,7 +2,6 @@ import datetime
 from datetime import timedelta
 import json
 import os
-
 import requests
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
@@ -17,12 +16,12 @@ from django.utils.http import urlencode, urlsafe_base64_encode
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django_celery_beat.models import ClockedSchedule, PeriodicTask
-
 from Loyalty_Program_App import settings
 from accounts.forms import PasswordRequestForm
 from merchantapp.forms import UserSearchForm, ProgramForm, BranchForm, AddressForm
 from merchantapp.models import Program, Branch, Order, UserReward, Merchant
 from merchantapp.templatetags import merchant_tags
+
 
 class PermissionAccessMixin(UserPassesTestMixin):
     def test_func(self):
