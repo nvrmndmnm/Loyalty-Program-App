@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load merchant_tags %}
+{% block title %}Главная — Allcard.me{% endblock %}
 {% block content %}
     <form method="get" action={% url 'merchantapp:user_search' %}>
         <div class="input-group">

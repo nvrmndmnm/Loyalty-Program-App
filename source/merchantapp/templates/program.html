@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% block title %}Программа — Allcard.me{% endblock %}
 {% block content %}
     <h1>{% trans "Programs" %}</h1>
     <a href="{% url 'merchantapp:program_create' %}">{% blocktrans %}Add program{% endblocktrans %}</a>

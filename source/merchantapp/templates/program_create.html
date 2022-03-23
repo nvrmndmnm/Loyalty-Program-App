@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %}Создать программу — Allcard.me{% endblock %}
 {% block content %}
     <form class="w-50" action="{% url 'merchantapp:program_create' %}" method="post" novalidate>
         {% include 'partial/form.html' with button_text='Отправить' %}
